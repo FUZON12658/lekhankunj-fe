@@ -106,11 +106,6 @@ const EmblaCarousel = (props) => {
       </div>
 
       <div className={styles.embla__controls}>
-        <div className={styles.embla__buttons}>
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
-        </div>
-
         <div className={styles.embla__dots}>
           {scrollSnaps.map((_, index) => (
             <DotButton
@@ -119,6 +114,11 @@ const EmblaCarousel = (props) => {
               className={`${styles.embla__dot} ${index === selectedIndex ? styles['embla__dot--selected'] : ''}`}
             />
           ))}
+        </div>
+
+        <div className={styles.embla__buttons}>
+          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
       </div>
     </div>
