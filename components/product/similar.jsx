@@ -1,7 +1,7 @@
-import CardBook from "../common/cardBook";
 import Button from "../common/button";
+import CardBook from "../common/cardBook";
 
-const Featured = () => {
+const Similar = () => {
   const metadata = [
     {
       tag: "New Release",
@@ -42,7 +42,9 @@ const Featured = () => {
   ];
   return (
     <div className="flex flex-col gap-12 bg-[#EBF8F7] items-center py-24">
-      <div className="text-header-2 font-recoleta">Featured This Month</div>
+      <div className="text-header-2 font-recoleta">
+        Similar books our Readers liked
+      </div>
       <div className="container flex gap-6">
         {metadata.map((item, index) => (
           <CardBook key={index} {...item} />
@@ -58,4 +60,4 @@ const Featured = () => {
     </div>
   );
 };
-export default Featured;
+export default Similar;

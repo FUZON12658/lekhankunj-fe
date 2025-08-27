@@ -1,99 +1,104 @@
 @import "tailwindcss";
 
+html {
+  font-size: 90%;
+}
+
 @font-face {
-  font-family: 'Recoleta';
-  src: url('../assets/fonts/fonnts.com-recoleta-thin.otf') format('opentype');
+  font-family: "Recoleta";
+  src: url("../assets/fonts/fonnts.com-recoleta-thin.otf") format("opentype");
   font-weight: 100;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Recoleta';
-  src: url('../assets/fonts/fonnts.com-recoleta-light.otf') format('opentype');
+  font-family: "Recoleta";
+  src: url("../assets/fonts/fonnts.com-recoleta-light.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Recoleta';
-  src: url('../assets/fonts/fonnts.com-recoleta-regular.otf') format('opentype');
+  font-family: "Recoleta";
+  src: url("../assets/fonts/fonnts.com-recoleta-regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Recoleta';
-  src: url('../assets/fonts/fonnts.com-recoleta-medium.otf') format('opentype');
+  font-family: "Recoleta";
+  src: url("../assets/fonts/fonnts.com-recoleta-medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Recoleta';
-  src: url('../assets/fonts/fonnts.com-recoleta-semibold.otf') format('opentype');
+  font-family: "Recoleta";
+  src: url("../assets/fonts/fonnts.com-recoleta-semibold.otf")
+    format("opentype");
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Recoleta';
-  src: url('../assets/fonts/fonnts.com-recoleta-bold.otf') format('opentype');
+  font-family: "Recoleta";
+  src: url("../assets/fonts/fonnts.com-recoleta-bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Recoleta';
-  src: url('../assets/fonts/fonnts.com-recoleta-black.otf') format('opentype');
+  font-family: "Recoleta";
+  src: url("../assets/fonts/fonnts.com-recoleta-black.otf") format("opentype");
   font-weight: 900;
   font-style: normal;
 }
 
 @theme {
-  --color-primary-100: #FAFAFA;
-  --color-primary-200: #E6E6E6;
-  --color-primary-300: #CCCCCC;
+  --color-primary-100: #fafafa;
+  --color-primary-200: #e6e6e6;
+  --color-primary-300: #cccccc;
   --color-primary-400: #999999;
   --color-primary-500: #666666;
-  --color-primary-600: #4D4D4D;
+  --color-primary-600: #4d4d4d;
   --color-primary-700: #333333;
-  --color-primary-800: #1A1A1A;
+  --color-primary-800: #1a1a1a;
 
-  --color-secondary-100: #EDF5F8;
-  --color-secondary-200: #C9E1E9;
-  --color-secondary-300: #A5CDDA;
-  --color-secondary-400: #81B9CB;
-  --color-secondary-500: #5BA4BB;
-  --color-secondary-600: #438BA2;
-  --color-secondary-700: #346C7E;
-  --color-secondary-800: #254D5A;
+  --color-secondary-100: #edf5f8;
+  --color-secondary-200: #c9e1e9;
+  --color-secondary-300: #a5cdda;
+  --color-secondary-400: #81b9cb;
+  --color-secondary-500: #5ba4bb;
+  --color-secondary-600: #438ba2;
+  --color-secondary-700: #346c7e;
+  --color-secondary-800: #254d5a;
 
-  --color-terser-100: #FEFAF6;
-  --color-terser-200: #FCEFDF;
-  --color-terser-300: #F7D7B0;
-  --color-terser-400: #F3BF81;
-  --color-terser-500: #EFA753;
-  --color-terser-600: #EB8F24;
-  --color-terser-700: #C97513;
-  --color-terser-800: #9A5A0E;
+  --color-terser-100: #fefaf6;
+  --color-terser-200: #fcefdf;
+  --color-terser-300: #f7d7b0;
+  --color-terser-400: #f3bf81;
+  --color-terser-500: #efa753;
+  --color-terser-600: #eb8f24;
+  --color-terser-700: #c97513;
+  --color-terser-800: #9a5a0e;
 
-  --color-info-red-100: #FBD0D0;
-  --color-info-red-200: #F7A1A1;
-  --color-info-red-300: #F37272;
-  --color-info-red-400: #EF4343;
-  --color-info-red-500: #EB1414;
-  --color-info-red-600: #EB1414;
-  --color-info-red-700: #BC1010;
-  --color-info-red-800: #8C0D0D;
+  --color-info-red-100: #fbd0d0;
+  --color-info-red-200: #f7a1a1;
+  --color-info-red-300: #f37272;
+  --color-info-red-400: #ef4343;
+  --color-info-red-500: #eb1414;
+  --color-info-red-600: #eb1414;
+  --color-info-red-700: #bc1010;
+  --color-info-red-800: #8c0d0d;
 
-  --color-info-green-100: #E4FBE9;
-  --color-info-green-200: #B8F4C5;
-  --color-info-green-300: #8CEDA1;
-  --color-info-green-400: #60E67D;
-  --color-info-green-500: #34E059;
-  --color-info-green-600: #1EC341;
+  --color-info-green-100: #e4fbe9;
+  --color-info-green-200: #b8f4c5;
+  --color-info-green-300: #8ceda1;
+  --color-info-green-400: #60e67d;
+  --color-info-green-500: #34e059;
+  --color-info-green-600: #1ec341;
   --color-info-green-700: #179632;
-  --color-info-green-800: #106A23;
+  --color-info-green-800: #106a23;
 }
 
 :root {
@@ -101,68 +106,68 @@
   --foreground: #171717;
 
   /* Primary Colors */
-  --primary-100: #FAFAFA;
-  --primary-200: #E6E6E6;
-  --primary-300: #CCCCCC;
+  --primary-100: #fafafa;
+  --primary-200: #e6e6e6;
+  --primary-300: #cccccc;
   --primary-400: #999999;
   --primary-500: #666666;
-  --primary-600: #4D4D4D;
+  --primary-600: #4d4d4d;
   --primary-700: #333333;
-  --primary-800: #1A1A1A;
+  --primary-800: #1a1a1a;
 
   /* Secondary Colors */
-  --secondary-100: #EDF5F8;
-  --secondary-200: #C9E1E9;
-  --secondary-300: #A5CDDA;
-  --secondary-400: #81B9CB;
-  --secondary-500: #5BA4BB;
-  --secondary-600: #438BA2;
-  --secondary-700: #346C7E;
-  --secondary-800: #254D5A;
+  --secondary-100: #edf5f8;
+  --secondary-200: #c9e1e9;
+  --secondary-300: #a5cdda;
+  --secondary-400: #81b9cb;
+  --secondary-500: #5ba4bb;
+  --secondary-600: #438ba2;
+  --secondary-700: #346c7e;
+  --secondary-800: #254d5a;
 
   /* Tersier Colors */
-  --terser-100: #FEFAF6;
-  --terser-200: #FCEFDF;
-  --terser-300: #F7D7B0;
-  --terser-400: #F3BF81;
-  --terser-500: #EFA753;
-  --terser-600: #EB8F24;
-  --terser-700: #C97513;
-  --terser-800: #9A5A0E;
+  --terser-100: #fefaf6;
+  --terser-200: #fcefdf;
+  --terser-300: #f7d7b0;
+  --terser-400: #f3bf81;
+  --terser-500: #efa753;
+  --terser-600: #eb8f24;
+  --terser-700: #c97513;
+  --terser-800: #9a5a0e;
 
   /* Information Red Colors */
-  --info-red-100: #FBD0D0;
-  --info-red-200: #F7A1A1;
-  --info-red-300: #F37272;
-  --info-red-400: #EF4343;
-  --info-red-500: #EB1414;
-  --info-red-600: #EB1414;
-  --info-red-700: #BC1010;
-  --info-red-800: #8C0D0D;
+  --info-red-100: #fbd0d0;
+  --info-red-200: #f7a1a1;
+  --info-red-300: #f37272;
+  --info-red-400: #ef4343;
+  --info-red-500: #eb1414;
+  --info-red-600: #eb1414;
+  --info-red-700: #bc1010;
+  --info-red-800: #8c0d0d;
 
   /* Information Green Colors */
-  --info-green-100: #E4FBE9;
-  --info-green-200: #B8F4C5;
-  --info-green-300: #8CEDA1;
-  --info-green-400: #60E67D;
-  --info-green-500: #34E059;
-  --info-green-600: #1EC341;
+  --info-green-100: #e4fbe9;
+  --info-green-200: #b8f4c5;
+  --info-green-300: #8ceda1;
+  --info-green-400: #60e67d;
+  --info-green-500: #34e059;
+  --info-green-600: #1ec341;
   --info-green-700: #179632;
-  --info-green-800: #106A23;
+  --info-green-800: #106a23;
 
   /* Shadow Colors */
-  --shadow-drop-1: 0px 15px 40px 0px #1C1A1840;
+  --shadow-drop-1: 0px 15px 40px 0px #1c1a1840;
   --shadow-drop-2: 0px 10px 40px -5px #33333326;
-  --shadow-drop-3: 15px 0px 40px 0px #1C1A1840;
-  --shadow-inner-1: 0px 6px 10px 0px #9A5A0E33 inset;
+  --shadow-drop-3: 15px 0px 40px 0px #1c1a1840;
+  --shadow-inner-1: 0px 6px 10px 0px #9a5a0e33 inset;
   --shadow-bg-blur: #808080;
 
   /* Background Colors */
   --bg-base-60: #808080;
 
-  --font-inter: 'Inter', sans-serif;
-  --font-poppins: 'Poppins', sans-serif;
-  --font-recoleta: 'Recoleta', sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+  --font-recoleta: "Recoleta", sans-serif;
 
   --brand-primary: rgb(47, 112, 193);
   --brand-secondary: rgb(116, 97, 195);
@@ -198,15 +203,11 @@
   --admonition-danger-rgb-value: 220, 38, 38;
 }
 
-.font-inter {
-  font-family: var(--font-inter);
-}
-
-.font-poppins {
+@utility font-poppins {
   font-family: var(--font-poppins);
 }
 
-.font-recoleta {
+@utility font-recoleta {
   font-family: var(--font-recoleta) !important;
 }
 
@@ -216,100 +217,99 @@ body {
   font-family: var(--font-poppins);
 }
 
-.container {
-  width: 1280px;
+@utility container {
+  width: 80rem;
   margin: 0 auto;
 }
 
-.text-hero {
-  font-size: 72px;
+@utility text-hero {
+  font-size: 4.5rem;
   line-height: 110%;
   font-weight: 700;
   letter-spacing: 0;
 }
 
-.text-header-1 {
-  font-size: 64px;
+@utility text-header-1 {
+  font-size: 4rem;
   line-height: 110%;
   font-weight: 700;
   letter-spacing: 0;
 }
 
-.text-header-2 {
-  font-size: 48px;
+@utility text-header-2 {
+  font-size: 3rem;
   line-height: 110%;
   font-weight: 700;
   letter-spacing: 0;
 }
 
-.text-header-3 {
-  font-size: 32px;
+@utility text-header-3 {
+  font-size: 2rem;
   line-height: 110%;
   font-weight: 700;
   letter-spacing: 0;
 }
 
-.text-subtitle-1 {
-  font-size: 24px;
+@utility text-subtitle-1 {
+  font-size: 1.5rem;
   line-height: 110%;
   font-weight: 700;
   letter-spacing: 0;
 }
 
-.text-subtitle-2 {
-  font-size: 18px;
+@utility text-subtitle-2 {
+  font-size: 1.125rem;
   line-height: 110%;
   font-weight: 700;
   letter-spacing: 0;
 }
 
-.text-subtitle-3 {
-  font-size: 16px;
-  line-height: 110%;
-  font-weight: 700;
-  letter-spacing: 0;
-
-}
-
-.text-subtitle-4 {
-  font-size: 14px;
+@utility text-subtitle-3 {
+  font-size: 1rem;
   line-height: 110%;
   font-weight: 700;
   letter-spacing: 0;
 }
 
-.text-body-1 {
-  font-family: 'Poppins', sans-serif;
+@utility text-subtitle-4 {
+  font-size: 0.875rem;
+  line-height: 110%;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+@utility text-body-1 {
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
-  font-size: 24px;
+  font-size: 1.5rem;
   line-height: 150%;
   letter-spacing: 0%;
 }
 
-.text-body-2 {
-  font-family: 'Poppins', sans-serif;
+@utility text-body-2 {
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 150%;
   letter-spacing: 0%;
 }
 
-.text-body-3 {
-  font-family: 'Poppins', sans-serif;
+@utility text-body-3 {
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 150%;
   letter-spacing: 0%;
 }
 
-.btn {
+@utility btn {
   box-shadow: none;
   transition: 0.3s ease;
 }
 
-.text-btn {
+@utility text-btn {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 110%;
 }
 
