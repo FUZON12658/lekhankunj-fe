@@ -26,7 +26,7 @@ const ReleaseCard = ({ author, title, publishedDate, publisher, categories, imag
                 </div>
             </div>
             <Image src={image} alt={title} width={320} height={460} className="absolute top-1/2 -right-1/2 -translate-x-1/2 -translate-y-1/2 w-[20rem] h-[29rem] object-cover" />
-            <Button onClick={() => { link }} size="medium" style="fill" text="Get Book" iconRight="placeholder" color="info-green" />
+            <Button href={link} size="medium" style="fill" text="Get Book" iconRight="placeholder" color="info-green" />
         </div>
     )
 }
@@ -39,7 +39,7 @@ const Latest = () => {
         publisher: "English Classics",
         categories: ["Fictional", "Magical Realism", "Asian Literature", "Domestic Fiction"],
         image: "/book.jpg",
-        link: "/",
+        link: "/product/1",
         quote: "A, euismod risus mi eget massa at justo sem. Sed eu id suscipit sociis. Nec nisl viverra a eget pellentesque quam ornare vitae facilisi.",
         quoteAuthor: "Chicago Tribune",
     }
