@@ -1,6 +1,6 @@
 "use client";
 import { useState, createContext, useContext } from "react";
-import { X, Plus, Minus, ShoppingBag } from "lucide-react";
+import { X, Plus, Minus, ShoppingBag, CreditCard, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Button from "./button";
 import { CartIcon } from "./icons";
@@ -44,6 +44,7 @@ export const CartProvider = ({ children }) => {
   ]);
   
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [showPaymentMethods, setShowPaymentMethods] = useState(false);
 
   const updateQuantity = (id, newQuantity) => {
     if (newQuantity <= 0) {
@@ -81,18 +82,32 @@ export const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
-  const toggleCart = () => setIsCartOpen(!isCartOpen);
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
+    setShowPaymentMethods(false); // Reset payment methods view when closing cart
+  };
+
+  const proceedToPayment = () => {
+    setShowPaymentMethods(true);
+  };
+
+  const backToCart = () => {
+    setShowPaymentMethods(false);
+  };
 
   return (
     <CartContext.Provider value={{
       cartItems,
       isCartOpen,
+      showPaymentMethods,
       toggleCart,
       updateQuantity,
       removeFromCart,
       addToCart,
       getTotalItems,
-      getTotalPrice
+      getTotalPrice,
+      proceedToPayment,
+      backToCart
     }}>
       {children}
     </CartContext.Provider>
@@ -143,6 +158,183 @@ const BookTypeTag = ({ type }) => {
     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTagStyle(type)}`}>
       {type}
     </span>
+  );
+};
+
+// Payment Methods Component
+const PaymentMethods = () => {
+  const { getTotalPrice, backToCart } = useCart();
+  const [selectedMethod, setSelectedMethod] = useState('');
+  const totalPrice = getTotalPrice();
+
+  const paymentMethods = [
+    {
+      id: 'khalti',
+      name: 'Khalti',
+      description: 'Pay with Khalti digital wallet',
+      url: 'https://khalti.com/payment',
+      logoUrl: 'https://khaltibyime.khalti.com/wp-content/uploads/2025/07/Logo-for-Blog.png',
+      bgColor: 'bg-purple-50',
+      borderColor: 'border-purple-200',
+      textColor: 'text-purple-800'
+    },
+    {
+      id: 'esewa',
+      name: 'eSewa',
+      description: 'Pay with eSewa digital wallet',
+      url: 'https://esewa.com.np/payment',
+      logoUrl: '/esewa.png',
+      bgColor: 'bg-green-50',
+      borderColor: 'border-green-200',
+      textColor: 'text-green-800'
+    },
+    {
+      id: 'paypal',
+      name: 'PayPal',
+      description: 'Pay with your PayPal account',
+      url: 'https://www.paypal.com/checkoutnow',
+      logoUrl: 'https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg',
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-200',
+      textColor: 'text-blue-800'
+    },
+    {
+      id: 'stripe',
+      name: 'Stripe',
+      description: 'Pay with credit or debit card',
+      url: 'https://checkout.stripe.com',
+      logoUrl: 'https://stripe.com/img/v3/home/twitter.png',
+      bgColor: 'bg-indigo-50',
+      borderColor: 'border-indigo-200',
+      textColor: 'text-indigo-800'
+    },
+    {
+      id: 'razorpay',
+      name: 'Razorpay',
+      description: 'Pay with UPI, cards, or wallets',
+      url: 'https://razorpay.com/payment',
+      logoUrl: 'https://razorpay.com/favicon.png',
+      bgColor: 'bg-cyan-50',
+      borderColor: 'border-cyan-200',
+      textColor: 'text-cyan-800'
+    },
+    {
+      id: 'square',
+      name: 'Square',
+      description: 'Secure payment processing',
+      url: 'https://squareup.com/payments',
+      logoUrl: 'https://squareup.com/favicon.ico',
+      bgColor: 'bg-gray-50',
+      borderColor: 'border-gray-200',
+      textColor: 'text-gray-800'
+    }
+  ];
+
+  const handlePaymentMethodSelect = (method) => {
+    setSelectedMethod(method.id);
+  };
+
+  const handleProceedToPayment = () => {
+    const selectedPaymentMethod = paymentMethods.find(method => method.id === selectedMethod);
+    if (selectedPaymentMethod) {
+      // Redirect to the payment method's site
+      window.open(selectedPaymentMethod.url, '_blank');
+    }
+  };
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={backToCart}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Payment Methods
+          </h2>
+        </div>
+      </div>
+
+      {/* Payment Methods List */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="space-y-3">
+          {paymentMethods.map((method) => (
+            <div
+              key={method.id}
+              className={`border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
+                selectedMethod === method.id
+                  ? `${method.borderColor} ${method.bgColor}`
+                  : 'border-gray-200 bg-white hover:border-gray-300'
+              }`}
+              onClick={() => handlePaymentMethodSelect(method)}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <img 
+                    src={method.logoUrl} 
+                    alt={`${method.name} logo`}
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                  <div 
+                    className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center text-gray-600 text-xs font-bold"
+                    style={{display: 'none'}}
+                  >
+                    {method.name.charAt(0)}
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className={`font-semibold ${selectedMethod === method.id ? method.textColor : 'text-gray-900'}`}>
+                    {method.name}
+                  </h3>
+                  <p className={`text-sm ${selectedMethod === method.id ? method.textColor : 'text-gray-600'}`}>
+                    {method.description}
+                  </p>
+                </div>
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  selectedMethod === method.id
+                    ? `${method.borderColor.replace('border-', 'border-')} bg-current`
+                    : 'border-gray-300'
+                }`}>
+                  {selectedMethod === method.id && (
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="border-t border-gray-200 p-4">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-lg font-semibold">Total:</span>
+          <span className="text-xl font-bold text-green-600">
+            ${totalPrice.toFixed(2)}
+          </span>
+        </div>
+        
+        <button
+          onClick={handleProceedToPayment}
+          disabled={!selectedMethod}
+          className={`w-full font-semibold py-3 px-4 rounded-md transition-colors duration-200 ${
+            selectedMethod
+              ? 'bg-green-600 hover:bg-green-700 text-white'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {selectedMethod ? 'Proceed to Payment' : 'Select a Payment Method'}
+        </button>
+      </div>
+    </div>
   );
 };
 
@@ -211,22 +403,85 @@ const CartItem = ({ item }) => {
   );
 };
 
-// Cart Sidebar Component
-const CartSidebar = () => {
-  const { cartItems, isCartOpen, toggleCart, getTotalPrice } = useCart();
+// Cart View Component
+const CartView = () => {
+  const { cartItems, getTotalPrice, proceedToPayment } = useCart();
   const [promoCode, setPromoCode] = useState('');
   const totalPrice = getTotalPrice();
 
   const handleApplyPromo = () => {
-    // Handle promo code application logic here
     console.log('Applying promo code:', promoCode);
   };
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Cart Items */}
+      <div className="flex-1 overflow-y-auto">
+        {cartItems.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-gray-500">
+            <ShoppingBag className="w-16 h-16 mb-4" />
+            <p className="text-lg font-medium">Your cart is empty</p>
+            <p className="text-sm mt-2">Add some books to get started!</p>
+          </div>
+        ) : (
+          <div>
+            {cartItems.map((item) => (
+              <CartItem key={`${item.id}-${item.bookType}`} item={item} />
+            ))}
+          </div>
+        )}
+      </div>
+      
+      {/* Footer */}
+      {cartItems.length > 0 && (
+        <div className="border-t border-gray-200 p-4">
+          {/* Total */}
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-lg font-semibold">Total:</span>
+            <span className="text-xl font-bold text-green-600">
+              ${totalPrice.toFixed(2)}
+            </span>
+          </div>
+          
+          {/* Promo Code Input */}
+          <div className="flex gap-2 mb-4">
+            <input
+              type="text"
+              placeholder="Promo code"
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            />
+            <button
+              onClick={handleApplyPromo}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-200"
+            >
+              Apply
+            </button>
+          </div>
+          
+          {/* Proceed to Checkout */}
+          <button 
+            onClick={proceedToPayment}
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-md transition-colors duration-200"
+          >
+            Proceed to Checkout
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Cart Sidebar Component
+const CartSidebar = () => {
+  const { cartItems, isCartOpen, toggleCart, showPaymentMethods } = useCart();
 
   return (
     <>
       {/* Overlay */}
       <div 
-        className={`fixed inset-0  bg-opacity-50 z-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-opacity-50 z-50 transition-opacity duration-300 ${
           isCartOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={toggleCart}
@@ -236,72 +491,26 @@ const CartSidebar = () => {
       <div className={`fixed right-0 top-0 h-full w-96 bg-white z-50 transform transition-transform duration-300 ease-in-out shadow-xl ${
         isCartOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Shopping Cart ({cartItems.length})
-            </h2>
-            <button
-              onClick={toggleCart}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-          
-          {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto">
-            {cartItems.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                <ShoppingBag className="w-16 h-16 mb-4" />
-                <p className="text-lg font-medium">Your cart is empty</p>
-                <p className="text-sm mt-2">Add some books to get started!</p>
-              </div>
-            ) : (
-              <div>
-                {cartItems.map((item) => (
-                  <CartItem key={`${item.id}-${item.bookType}`} item={item} />
-                ))}
-              </div>
-            )}
-          </div>
-          
-          {/* Footer */}
-          {cartItems.length > 0 && (
-            <div className="border-t border-gray-200 p-4">
-              {/* Total */}
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-lg font-semibold">Total:</span>
-                <span className="text-xl font-bold text-green-600">
-                  ${totalPrice.toFixed(2)}
-                </span>
-              </div>
-              
-              {/* Promo Code Input */}
-              <div className="flex gap-2 mb-4">
-                <input
-                  type="text"
-                  placeholder="Promo code"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                />
-                <button
-                  onClick={handleApplyPromo}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-200"
-                >
-                  Apply
-                </button>
-              </div>
-              
-              {/* Proceed to Checkout */}
-              <button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-md transition-colors duration-200">
-                Proceed to Checkout
+        {showPaymentMethods ? (
+          <PaymentMethods />
+        ) : (
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Shopping Cart ({cartItems.length})
+              </h2>
+              <button
+                onClick={toggleCart}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
               </button>
             </div>
-          )}
-        </div>
+            
+            <CartView />
+          </div>
+        )}
       </div>
     </>
   );

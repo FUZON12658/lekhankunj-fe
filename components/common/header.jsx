@@ -121,7 +121,7 @@ const Header = () => {
         <div className="flex items-center gap-8">
           <Search />
           <CartIconTrigger className={`w-6 h-6`} />
-          <Button color="info-green" size="small" text="Login" style="fill" />
+          <Link href={`/auth/register`}><Button color="info-green" size="small" text="Login" style="fill" /></Link>
         </div>
       </div>
       

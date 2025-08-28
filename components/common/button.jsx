@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const Button = ({ size, text, style, color, iconLeft, iconRight, onClick, href }) => {
+export const Button = ({ size, text, style, color, iconLeft, iconRight, onClick, href }) => {
     const buttonStyles =
         style === 'fill' ? `btn-fill-${color}` :
             style === 'line' ? `btn-line-${color}` :
