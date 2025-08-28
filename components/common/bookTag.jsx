@@ -30,13 +30,13 @@ const BookTag = ({ tag }) => {
 
   return (
     <div
-      className={`rounded-2xl flex items-center gap-1 pl-1 pr-2 py-1 whitespace-nowrap ${metadata.background}`}
+      className={`rounded-2xl flex items-center gap-1  px-2 py-1 whitespace-nowrap ${metadata.background}`}
     >
-      <div
+      {/* <div
         className={`w-5 h-5 grid place-items-center rounded-full relative ${metadata.iconBackground}`}
       >
         <Image src={metadata.icon} alt="Icon" width={12} height={12} />
-      </div>
+      </div> */}
       <h3 className={`font-poppins text-xs font-medium ${metadata.text}`}>
         {metadata.title}
       </h3>
