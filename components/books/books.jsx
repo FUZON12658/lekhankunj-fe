@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Check, X } from "lucide-react";
 import { DualRangeSlider } from "../ui/dual_range_slider";
 import CardBook from "../common/cardBook";
+import Link from "next/link";
 
 export const Books = () => {
   const [minCost, setMinCost] = useState(0);
@@ -532,7 +533,7 @@ export const Books = () => {
         ) : (
           <div className="featured-books grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 lg:col-span-3 gap-4">
             {filteredBooks.map((book) => (
-              <a key={book.id} href={book.link} className="block">
+              <Link key={book.id} href={book.link} className="block">
                 <CardBook
                   tag={book.tag}
                   image={book.image}
@@ -542,7 +543,7 @@ export const Books = () => {
                   price={book.price}
                   discountedPrice={book.discountedPrice}
                 />
-              </a>
+              </Link>
             ))}
           </div>
         )}
