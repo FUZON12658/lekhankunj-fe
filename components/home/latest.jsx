@@ -26,7 +26,7 @@ const ReleaseCard = ({ author, title, publishedDate, publisher, categories, imag
                 </div>
             </div>
             <Image src={image} alt={title} width={320} height={460} className="absolute top-1/2 -right-1/2 -translate-x-1/2 -translate-y-1/2 w-[20rem] h-[29rem] object-cover" />
-            <Button href={link} size="medium" style="fill" text="Get Book" iconRight="placeholder" color="info-green" />
+            <Button href={link} size="medium" style="fill" text="Get Book" iconRight="carticon" color="info-green" />
         </div>
     )
 }
