@@ -2,6 +2,7 @@ import { useState } from "react";
 import BookTag from "@/components/common/bookTag";
 import Button from "@/components/common/button";
 import Image from "next/image";
+import { useCart } from "../common/cart_sidebar";
 
 const StockStatus = ({ status }) => {
   const stockStatusText =
@@ -25,17 +26,204 @@ const StockStatus = ({ status }) => {
   );
 };
 
-const Info = ({ product }) => {
-  const [quantity, setQuantity] = useState(1);
-  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const [isShippingOpen, setIsShippingOpen] = useState(false);
+const BookTypeSelector = ({ product, selectedTypes, onTypeChange, onQuantityChange, quantities }) => {
+  const bookTypes = [
+    {
+      id: 'physical',
+      name: 'Physical Book',
+      price: product.pricing.physicalBook || product.pricing.basePrice,
+      allowQuantity: true
+    },
+    {
+      id: 'ebook',
+      name: 'E-book',
+      price: product.pricing.ebook || (product.pricing.basePrice * 0.7), // 30% cheaper than physical
+      allowQuantity: false
+    },
+    {
+      id: 'audiobook',
+      name: 'Audio Book',
+      price: product.pricing.audiobook || (product.pricing.basePrice * 1.2), // 20% more expensive
+      allowQuantity: false
+    }
+  ];
 
-  const incrementQuantity = () => setQuantity((prev) => prev + 1);
-  const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
+  const handleTypeToggle = (typeId) => {
+    const newSelectedTypes = selectedTypes.includes(typeId)
+      ? selectedTypes.filter(id => id !== typeId)
+      : [...selectedTypes, typeId];
+    
+    onTypeChange(newSelectedTypes);
+  };
+
+  const handleQuantityChange = (typeId, change) => {
+    const currentQuantity = quantities[typeId] || 1;
+    const newQuantity = Math.max(1, currentQuantity + change);
+    onQuantityChange(typeId, newQuantity);
+  };
 
   return (
-    <div className="container py-8">
-      <div className="grid grid-cols-2 items-center gap-12">
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-primary-700">Select Book Type(s)</h3>
+      
+      {bookTypes.map((type) => (
+        <div key={type.id} className="border border-primary-300 rounded-lg p-4">
+          <div className="flex items-center space-x-3">
+            <input
+              type="checkbox"
+              id={type.id}
+              checked={selectedTypes.includes(type.id)}
+              onChange={() => handleTypeToggle(type.id)}
+              className="w-4 h-4 text-primary-600 focus:ring-primary-500 border-primary-300 rounded"
+            />
+            <label htmlFor={type.id} className="flex-1 cursor-pointer">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-primary-700 font-medium">{type.name}</span>
+                  <div className="text-sm text-primary-500">
+                    {product.pricing.currency} {type.price.toFixed(2)}
+                  </div>
+                </div>
+                
+                {selectedTypes.includes(type.id) && type.allowQuantity && (
+                  <div className="flex items-center space-x-2 px-3 py-1 border border-primary-400 rounded-full">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleQuantityChange(type.id, -1);
+                      }}
+                      className="text-primary-600 hover:text-primary-800"
+                    >
+                      -
+                    </button>
+                    <span className="w-8 text-center text-sm">
+                      {quantities[type.id] || 1}
+                    </span>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleQuantityChange(type.id, 1);
+                      }}
+                      className="text-primary-600 hover:text-primary-800"
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
+                
+                {selectedTypes.includes(type.id) && !type.allowQuantity && (
+                  <span className="text-xs text-primary-500 bg-primary-100 px-2 py-1 rounded">
+                    Digital Copy
+                  </span>
+                )}
+              </div>
+            </label>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const Info = ({ product }) => {
+  const [selectedTypes, setSelectedTypes] = useState(['physical']);
+  const [quantities, setQuantities] = useState({ physical: 1 });
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
+  const [isShippingOpen, setIsShippingOpen] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+
+  // Get cart context
+  const { addToCart } = useCart();
+
+  // Enhanced product with pricing for different formats
+  const enhancedProduct = {
+    ...product,
+    pricing: {
+      ...product.pricing,
+      physicalBook: product.pricing.basePrice,
+      ebook: Math.round(product.pricing.basePrice * 0.7), // 30% cheaper
+      audiobook: Math.round(product.pricing.basePrice * 1.2) // 20% more expensive
+    }
+  };
+
+  const calculateTotalPrice = () => {
+    let total = 0;
+    selectedTypes.forEach(typeId => {
+      let price;
+      switch(typeId) {
+        case 'physical':
+          price = enhancedProduct.pricing.physicalBook;
+          break;
+        case 'ebook':
+          price = enhancedProduct.pricing.ebook;
+          break;
+        case 'audiobook':
+          price = enhancedProduct.pricing.audiobook;
+          break;
+        default:
+          price = 0;
+      }
+      const quantity = typeId === 'physical' ? (quantities[typeId] || 1) : 1;
+      total += price * quantity;
+    });
+    return total;
+  };
+
+  const handleAddToCart = async () => {
+    if (selectedTypes.length === 0) return;
+    
+    setIsAdding(true);
+    
+    try {
+      // Add each selected type as a separate cart item
+      const cartPromises = selectedTypes.map(typeId => {
+        const cartItem = {
+          id: `${product.id}-${typeId}`,
+          productId: product.id,
+          title: product.title,
+          writer: product.author.name,
+          image: product.images.primary,
+          bookType: typeId,
+          price: typeId === 'physical' ? enhancedProduct.pricing.physicalBook :
+                 typeId === 'ebook' ? enhancedProduct.pricing.ebook :
+                 enhancedProduct.pricing.audiobook,
+          quantity: typeId === 'physical' ? (quantities[typeId] || 1) : 1,
+          discountedPrice: null // Add if you have sale prices
+        };
+        
+        return addToCart(cartItem);
+      });
+      
+      await Promise.all(cartPromises);
+      
+      // Optional: Show success feedback
+      // You could add a toast notification here
+      console.log('Successfully added to cart');
+      
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      // Optional: Show error feedback
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (selectedTypes.length === 0) return;
+    
+    // First add to cart
+    await handleAddToCart();
+    
+    // Then redirect to checkout or open cart
+    // You could implement immediate checkout logic here
+    console.log('Proceeding to checkout');
+  };
+
+  const totalPrice = calculateTotalPrice();
+
+  return (
+    <div className="container py-8 relative">
+      <div className="grid grid-cols-2 gap-12">
         <div className="space-y-4">
           <div className="text-primary-500">
             <span className="hover:underline cursor-pointer">
@@ -47,12 +235,10 @@ const Info = ({ product }) => {
               <h1 className="font-recoleta text-header-1 text-primary-700">
                 {product.title}
               </h1>
-              {/* <Heart className="h-6 w-6 text-gray-400 cursor-pointer hover:text-red-500" /> */}
             </div>
             <p className="text-primary-500">{product.publisher}</p>
             <p className="text-sm text-primary-500">ISBN: {product.isbn}</p>
           </div>
-          {/* <p className="text-sm text-gray-600 mb-4">Paperback</p> */}
 
           <div className="flex gap-4">
             {product.format.map((value) => (
@@ -62,68 +248,71 @@ const Info = ({ product }) => {
 
           <StockStatus status={product.stock.status} />
 
-          {/* Price */}
-          <div className="text-header-2 font-recoleta text-primary-700 py-4">
-            {product.pricing.currency}.{product.pricing.basePrice.toFixed(2)}
+          {/* Book Type Selection */}
+          <BookTypeSelector 
+            product={enhancedProduct}
+            selectedTypes={selectedTypes}
+            onTypeChange={setSelectedTypes}
+            onQuantityChange={(typeId, quantity) => {
+              setQuantities(prev => ({ ...prev, [typeId]: quantity }));
+            }}
+            quantities={quantities}
+          />
+
+          {/* Total Price */}
+          <div className="text-header-2 font-recoleta text-primary-700 py-4 border-t border-primary-300">
+            Total: {product.pricing.currency} {totalPrice.toFixed(2)}
+            {selectedTypes.length > 1 && (
+              <div className="text-sm text-primary-500 font-normal">
+                ({selectedTypes.length} item{selectedTypes.length > 1 ? 's' : ''} selected)
+              </div>
+            )}
           </div>
 
-          {/* Quantity and buttons */}
-          <div className="flex justify-between items-center space-x-4">
-            <div className="flex items-center space-x-4 px-4 py-2 text-xl border border-primary-400 rounded-full">
-              <button
-                onClick={decrementQuantity}
-                // className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50"
-              >
-                {/* <Minus className="h-4 w-4" /> */}-
-              </button>
-              <span className="w-20 text-center">{quantity}</span>
-              <button
-                onClick={incrementQuantity}
-                // className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50"
-              >
-                {/* <Plus className="h-4 w-4" /> */}+
-              </button>
-            </div>
+          {/* Action buttons */}
+          <div className="flex space-x-3">
+            <Button
+              text={isAdding ? "Adding..." : "Add to cart"}
+              style="line"
+              color="primary"
+              size="medium"
+              onClick={handleAddToCart}
+              disabled={selectedTypes.length === 0 || isAdding}
+            />
 
-            <div className="flex space-x-3">
-              <Button
-                text="Add to cart"
-                style="line"
-                color="primary"
-                size="medium"
-              />
-
-              <Button
-                text="Buy Now"
-                style="fill"
-                color="info-green"
-                size="medium"
-              />
-            </div>
+            <Button
+              text="Buy Now"
+              style="fill"
+              color="info-green"
+              size="medium"
+              onClick={handleBuyNow}
+              disabled={selectedTypes.length === 0 || isAdding}
+            />
           </div>
 
-          {/* Store pickup info */}
-          {/* <div className="border-t pt-6">
-            <div className="flex items-start space-x-3">
-              <div className="w-5 h-5 border-2 border-green-500 rounded-full flex items-center justify-center mt-0.5">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  Pickup available at{" "}
-                  <span className="font-bold">
-                    {product.storePickup.storeName}
-                  </span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Usually ready in {product.storePickup.readyIn}
-                </p>
-                <button className="text-sm text-blue-600 hover:underline mt-1">
-                  View store information
-                </button>
+          {/* Selected Items Summary */}
+          {selectedTypes.length > 0 && (
+            <div className="bg-primary-50 p-4 rounded-lg">
+              <h4 className="text-sm font-semibold text-primary-700 mb-2">Selected Items:</h4>
+              <div className="space-y-1">
+                {selectedTypes.map(typeId => {
+                  const typeName = typeId === 'physical' ? 'Physical Book' :
+                                 typeId === 'ebook' ? 'E-book' : 'Audio Book';
+                  const price = typeId === 'physical' ? enhancedProduct.pricing.physicalBook :
+                               typeId === 'ebook' ? enhancedProduct.pricing.ebook :
+                               enhancedProduct.pricing.audiobook;
+                  const quantity = typeId === 'physical' ? (quantities[typeId] || 1) : 1;
+                  
+                  return (
+                    <div key={typeId} className="flex justify-between text-sm text-primary-600">
+                      <span>{typeName} {quantity > 1 ? `× ${quantity}` : ''}</span>
+                      <span>{product.pricing.currency} {(price * quantity).toFixed(2)}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </div> */}
+          )}
 
           {/* Collapsible sections */}
           <div className="py-8">
@@ -134,7 +323,6 @@ const Info = ({ product }) => {
                 className="flex items-center justify-between w-full text-left"
               >
                 <h3 className="text-body-2 text-primary-700">Description</h3>
-                {/* <ChevronDown className={`h-5 w-5 transition-transform ${isDescriptionOpen ? 'rotate-180' : ''}`} /> */}
               </button>
               {isDescriptionOpen && (
                 <div className="py-4 text-sm text-primary-500">
@@ -168,7 +356,6 @@ const Info = ({ product }) => {
                 className="flex items-center justify-between w-full text-left"
               >
                 <h3 className="text-body-2 text-primary-700">Shipping</h3>
-                {/* <ChevronDown className={`h-5 w-5 transition-transform ${isShippingOpen ? 'rotate-180' : ''}`} /> */}
               </button>
               {isShippingOpen && (
                 <div className="py-4 text-sm text-gray-600 space-y-4">
@@ -198,22 +385,26 @@ const Info = ({ product }) => {
                       </p>
                     </div>
                   </div>
+                  <div className="text-xs text-gray-500 p-2 bg-gray-50 rounded">
+                    <strong>Note:</strong> Digital products (E-books and Audio books) are delivered instantly via email after payment confirmation.
+                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
-        <div className="h-full overflow-hidden">
+        <div className="h-[60rem] w-[41.15rem] sticky top-28 overflow-hidden rounded-sm">
           <Image
             src={product.images.primary}
             alt={product.images.altText}
             width={640}
             height={960}
-            className="w-full h-full object-cover rounded-lg shadow-lg"
+            className="w-full h-full object-contain rounded-sm shadow-lg"
           />
         </div>
       </div>
     </div>
   );
 };
+
 export default Info;

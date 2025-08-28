@@ -12,18 +12,20 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([
     {
-      id: 1,
+      id: "1-physical",
+      productId: "1",
       title: "Stormlight Archive: The Way of Kings",
       writer: "Brandon Sanderson",
       image: "/book.jpg",
-      bookType: "physical", // physical, ebook, or audiobook
+      bookType: "physical",
       price: 19.0,
       discountedPrice: 23.5,
       quantity: 2
     },
     {
-      id: 2,
-      title: "The Island of Doctor Morea",
+      id: "2-ebook",
+      productId: "2", 
+      title: "The Island of Doctor Moreau",
       writer: "H.G. Wells",
       image: "/book.jpg",
       bookType: "ebook",
@@ -32,9 +34,10 @@ export const CartProvider = ({ children }) => {
       quantity: 1
     },
     {
-      id: 3,
+      id: "3-audiobook",
+      productId: "3",
       title: "Dune",
-      writer: "Frank Herbert",
+      writer: "Frank Herbert", 
       image: "/book.jpg",
       bookType: "audiobook",
       price: 25.0,
@@ -52,9 +55,15 @@ export const CartProvider = ({ children }) => {
       return;
     }
     setCartItems(prev => 
-      prev.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
+      prev.map(item => {
+        if (item.id === id) {
+          // Only allow quantity changes for physical books
+          if (item.bookType === 'physical') {
+            return { ...item, quantity: newQuantity };
+          }
+        }
+        return item;
+      })
     );
   };
 
@@ -64,14 +73,15 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (book) => {
     const existingItem = cartItems.find(item => 
-      item.id === book.id && item.bookType === book.bookType
+      item.id === book.id
     );
     
-    if (existingItem) {
+    if (existingItem && existingItem.bookType === 'physical') {
       updateQuantity(existingItem.id, existingItem.quantity + 1);
-    } else {
-      setCartItems(prev => [...prev, { ...book, quantity: 1 }]);
+    } else if (!existingItem) {
+      setCartItems(prev => [...prev, { ...book, quantity: book.quantity || 1 }]);
     }
+    // For ebook and audiobook, don't add duplicates since they're digital
   };
 
   const getTotalItems = () => {
@@ -84,7 +94,7 @@ export const CartProvider = ({ children }) => {
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
-    setShowPaymentMethods(false); // Reset payment methods view when closing cart
+    setShowPaymentMethods(false);
   };
 
   const proceedToPayment = () => {
@@ -122,7 +132,7 @@ export const useCart = () => {
   return context;
 };
 
-// Cart Icon Component (Updated)
+// Cart Icon Component
 export const CartIconTrigger = ({ className }) => {
   const { toggleCart, getTotalItems } = useCart();
   const totalItems = getTotalItems();
@@ -154,9 +164,22 @@ const BookTypeTag = ({ type }) => {
     }
   };
 
+  const getDisplayName = (type) => {
+    switch (type) {
+      case 'physical':
+        return 'Physical';
+      case 'ebook':
+        return 'E-book';
+      case 'audiobook':
+        return 'Audio Book';
+      default:
+        return type;
+    }
+  };
+
   return (
     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTagStyle(type)}`}>
-      {type}
+      {getDisplayName(type)}
     </span>
   );
 };
@@ -207,26 +230,6 @@ const PaymentMethods = () => {
       bgColor: 'bg-indigo-50',
       borderColor: 'border-indigo-200',
       textColor: 'text-indigo-800'
-    },
-    {
-      id: 'razorpay',
-      name: 'Razorpay',
-      description: 'Pay with UPI, cards, or wallets',
-      url: 'https://razorpay.com/payment',
-      logoUrl: 'https://razorpay.com/favicon.png',
-      bgColor: 'bg-cyan-50',
-      borderColor: 'border-cyan-200',
-      textColor: 'text-cyan-800'
-    },
-    {
-      id: 'square',
-      name: 'Square',
-      description: 'Secure payment processing',
-      url: 'https://squareup.com/payments',
-      logoUrl: 'https://squareup.com/favicon.ico',
-      bgColor: 'bg-gray-50',
-      borderColor: 'border-gray-200',
-      textColor: 'text-gray-800'
     }
   ];
 
@@ -237,7 +240,6 @@ const PaymentMethods = () => {
   const handleProceedToPayment = () => {
     const selectedPaymentMethod = paymentMethods.find(method => method.id === selectedMethod);
     if (selectedPaymentMethod) {
-      // Redirect to the payment method's site
       window.open(selectedPaymentMethod.url, '_blank');
     }
   };
@@ -318,7 +320,7 @@ const PaymentMethods = () => {
         <div className="flex items-center justify-between mb-4">
           <span className="text-lg font-semibold">Total:</span>
           <span className="text-xl font-bold text-green-600">
-            ${totalPrice.toFixed(2)}
+            NRs. {totalPrice.toFixed(2)}
           </span>
         </div>
         
@@ -341,6 +343,8 @@ const PaymentMethods = () => {
 // Cart Item Component
 const CartItem = ({ item }) => {
   const { updateQuantity, removeFromCart } = useCart();
+  
+  const canChangeQuantity = item.bookType === 'physical';
 
   return (
     <div className="flex gap-4 p-4 border-b border-gray-200">
@@ -360,35 +364,51 @@ const CartItem = ({ item }) => {
         <p className="text-xs text-gray-600 mt-1">by {item.writer}</p>
         
         <div className="flex items-center gap-2 mt-2">
-          <BookTag tag={item.bookType} />
+          <BookTypeTag type={item.bookType} />
+          {!canChangeQuantity && (
+            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+              Digital
+            </span>
+          )}
         </div>
         
         <div className="flex items-center justify-between mt-3">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-sm">${item.price.toFixed(2)}</span>
+          <div className="flex items-start flex-col">
+            <span className="font-bold text-sm">NRs. {item.price.toFixed(2)}</span>
             {item.discountedPrice && (
               <span className="text-xs text-gray-500 line-through">
-                ${item.discountedPrice.toFixed(2)}
+                NRs. {item.discountedPrice.toFixed(2)}
               </span>
             )}
           </div>
           
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-              className="w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded transition-colors"
-            >
-              <Minus className="w-3 h-3" />
-            </button>
-            <span className="w-8 text-center text-sm font-medium">
-              {item.quantity}
-            </span>
-            <button
-              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-              className="w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded transition-colors"
-            >
-              <Plus className="w-3 h-3" />
-            </button>
+            {canChangeQuantity ? (
+              <>
+                <button
+                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                  className="w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded transition-colors"
+                >
+                  <Minus className="w-3 h-3" />
+                </button>
+                <span className="w-8 text-center text-sm font-medium">
+                  {item.quantity}
+                </span>
+                <button
+                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                  className="w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded transition-colors"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              </>
+            ) : (
+              <div className="flex items-center">
+                <span className="w-8 text-center text-sm font-medium text-gray-500">
+                  1
+                </span>
+                <span className="text-xs text-gray-400 ml-2">Digital Copy</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -413,6 +433,14 @@ const CartView = () => {
     console.log('Applying promo code:', promoCode);
   };
 
+  const getCartSummary = () => {
+    const physicalBooks = cartItems.filter(item => item.bookType === 'physical').length;
+    const digitalBooks = cartItems.filter(item => item.bookType !== 'physical').length;
+    return { physicalBooks, digitalBooks };
+  };
+
+  const { physicalBooks, digitalBooks } = getCartSummary();
+
   return (
     <div className="flex flex-col h-full">
       {/* Cart Items */}
@@ -426,7 +454,7 @@ const CartView = () => {
         ) : (
           <div>
             {cartItems.map((item) => (
-              <CartItem key={`${item.id}-${item.bookType}`} item={item} />
+              <CartItem key={item.id} item={item} />
             ))}
           </div>
         )}
@@ -435,11 +463,31 @@ const CartView = () => {
       {/* Footer */}
       {cartItems.length > 0 && (
         <div className="border-t border-gray-200 p-4">
+          {/* Cart Summary */}
+          {(physicalBooks > 0 || digitalBooks > 0) && (
+            <div className="mb-3 p-3 bg-gray-50 rounded-lg">
+              <div className="text-xs text-gray-600 space-y-1">
+                {physicalBooks > 0 && (
+                  <div className="flex justify-between">
+                    <span>Physical books ({physicalBooks})</span>
+                    <span>Ships in 2-3 days</span>
+                  </div>
+                )}
+                {digitalBooks > 0 && (
+                  <div className="flex justify-between">
+                    <span>Digital books ({digitalBooks})</span>
+                    <span>Instant delivery</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Total */}
           <div className="flex items-center justify-between mb-4">
             <span className="text-lg font-semibold">Total:</span>
             <span className="text-xl font-bold text-green-600">
-              ${totalPrice.toFixed(2)}
+              NRs. {totalPrice.toFixed(2)}
             </span>
           </div>
           

@@ -7,6 +7,7 @@ const PRODUCT_ARRAY = [
   {
     id: "1",
     title: "The Island of Doctor Moreau",
+    slug: "the-island-of-dr-moreau",
     author: {
       id: "h-g-wells",
       name: "H.G. Wells",
@@ -18,6 +19,9 @@ const PRODUCT_ARRAY = [
     pricing: {
       currency: "NPR",
       basePrice: 890.0,
+      physicalBook: 890.0,
+      ebook: 623.0, // 30% less than physical
+      audiobook: 1068.0, // 20% more than physical
       salePrice: null,
     },
     stock: {
@@ -74,36 +78,20 @@ const PRODUCT_ARRAY = [
           "Outside the valley, orders arrive in 2-3 days near district HQs or major towns; rural or remote areas may take longer.",
       },
     },
-    // storePickup: {
-    //   available: true,
-    //   storeName: "BIBLIONEPAL STORE",
-    //   readyIn: "2 hours",
-    //   address: {
-    //     street: "Chaksibari Marg",
-    //     area: "Thamel",
-    //     city: "Kathmandu",
-    //     postalCode: "44600",
-    //     country: "Nepal",
-    //   },
-    //   phone: "+97714700975",
-    // },
-    // categories: [
-    //   {
-    //     id: "classic-literature",
-    //     name: "Classic Literature",
-    //     slug: "classic-literature",
-    //   },
-    //   {
-    //     id: "science-fiction",
-    //     name: "Science Fiction",
-    //     slug: "science-fiction",
-    //   },
-    //   {
-    //     id: "horror",
-    //     name: "Horror",
-    //     slug: "horror",
-    //   },
-    // ],
+    availability: {
+      physical: {
+        inStock: true,
+        quantity: 15
+      },
+      ebook: {
+        inStock: true,
+        unlimited: true
+      },
+      audiobook: {
+        inStock: true, 
+        unlimited: true
+      }
+    },
     tags: [
       "h-g-wells",
       "classic",
@@ -116,11 +104,18 @@ const PRODUCT_ARRAY = [
 ];
 
 const Product = () => {
-  const { id } = useParams();
-  const product = PRODUCT_ARRAY.find((prod) => prod.id === id);
+  const { slug } = useParams();
+  const product = PRODUCT_ARRAY.find((prod) => prod.slug === "the-island-of-dr-moreau");
 
   if (!product) {
-    return <div>Product not found</div>;
+    return (
+      <div className="container py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Product not found</h1>
+          <p className="text-gray-600">The book you're looking for doesn't exist or has been removed.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -130,4 +125,5 @@ const Product = () => {
     </>
   );
 };
+
 export default Product;
