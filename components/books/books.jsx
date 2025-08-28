@@ -1,23 +1,24 @@
-'use client';
-import React, { useState, useEffect, useMemo } from 'react';
-import { Check, X } from 'lucide-react';
-import { DualRangeSlider } from '../ui/dual_range_slider';
+"use client";
+import React, { useState, useEffect, useMemo } from "react";
+import { Check, X } from "lucide-react";
+import { DualRangeSlider } from "../ui/dual_range_slider";
+import CardBook from "../common/cardBook";
 
 export const Books = () => {
   const [minCost, setMinCost] = useState(0);
   const [maxCost, setMaxCost] = useState(50);
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
-    keywords: '',
-    duration: '',
-    season: '',
+    keywords: "",
+    duration: "",
+    season: "",
     category: [],
   });
 
   // Initialize filters based on URL query parameters
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const categoryParam = urlParams.get('category');
+    const categoryParam = urlParams.get("category");
 
     if (categoryParam) {
       setFilters((prev) => ({
@@ -28,7 +29,7 @@ export const Books = () => {
   }, []);
 
   const handleFilterChange = (field, value) => {
-    if (field === 'category') {
+    if (field === "category") {
       setFilters((prev) => ({
         ...prev,
         category: prev.category.includes(value)
@@ -41,7 +42,7 @@ export const Books = () => {
   };
 
   const handleSubmit = () => {
-    console.log('Filters applied:', {
+    console.log("Filters applied:", {
       ...filters,
       priceRange: [minCost, maxCost],
     });
@@ -50,14 +51,17 @@ export const Books = () => {
   const books = [
     {
       id: 1,
-      title: 'Mera Ba ',
-      author: 'Nila Ghimire',
-      slug: 'mera-ba',
-      image: '/mera-ba/front.jpeg',
+      title: "Mera Ba ",
+      author: "Nila Ghimire",
+      slug: "mera-ba",
+      image: "/mera-ba/front.jpeg",
       price: 15,
       priceNpr: 1200,
-      category: 'fiction',
-      link: '/books/mera-ba/',
+      discountedPrice: 18,
+      category: "fiction",
+      link: "/books/mera-ba/",
+      tag: "New Release",
+      bookTags: ["physical", "ebook", "audiobook"],
       formats: {
         physical: true,
         pdf: true,
@@ -67,42 +71,45 @@ export const Books = () => {
         chapters: [
           {
             id: 1,
-            title: 'Chapter 1: Mera Ba Chapter 1',
-            duration: '8:07',
-            audioUrl: '/audio/audio.mp3',
+            title: "Chapter 1: Mera Ba Chapter 1",
+            duration: "8:07",
+            audioUrl: "/audio/audio.mp3",
           },
           {
             id: 2,
-            title: 'Chapter 2: Mera Ba Chapter 2',
-            duration: '8:07',
-            audioUrl: '/audio/audio.mp3',
+            title: "Chapter 2: Mera Ba Chapter 2",
+            duration: "8:07",
+            audioUrl: "/audio/audio.mp3",
           },
           {
             id: 3,
-            title: 'Chapter 3: Mera Ba Chapter 3',
-            duration: '8:07',
-            audioUrl: '/audio/audio.mp3',
+            title: "Chapter 3: Mera Ba Chapter 3",
+            duration: "8:07",
+            audioUrl: "/audio/audio.mp3",
           },
           {
             id: 4,
-            title: 'Chapter 4: Mera Ba Chapter 4',
-            duration: '8:07',
-            audioUrl: '/audio/audio.mp3',
+            title: "Chapter 4: Mera Ba Chapter 4",
+            duration: "8:07",
+            audioUrl: "/audio/audio.mp3",
           },
         ],
       },
     },
     {
       id: 2,
-      title: 'Sapiens: A Brief History of Humankind',
-      author: 'Yuval Noah Harari',
-      slug: 'sapiens',
+      title: "Sapiens: A Brief History of Humankind",
+      author: "Yuval Noah Harari",
+      slug: "sapiens",
       image:
-        'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=400&fit=crop',
+        "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=400&fit=crop",
       price: 25,
       priceNpr: 2000,
-      category: 'non-fiction',
-      link: '/books/sapiens/',
+      discountedPrice: 30,
+      category: "non-fiction",
+      link: "/books/sapiens/",
+      tag: "Bestseller",
+      bookTags: ["physical", "ebook", "audiobook"],
       formats: {
         physical: true,
         pdf: false,
@@ -111,15 +118,18 @@ export const Books = () => {
     },
     {
       id: 3,
-      title: 'The Girl with the Dragon Tattoo',
-      author: 'Stieg Larsson',
-      slug: 'dragon-tattoo',
+      title: "The Girl with the Dragon Tattoo",
+      author: "Stieg Larsson",
+      slug: "dragon-tattoo",
       image:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop',
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop",
       price: 18,
       priceNpr: 1440,
-      category: 'mystery-thriller',
-      link: '/books/dragon-tattoo/',
+      discountedPrice: 22,
+      category: "mystery-thriller",
+      link: "/books/dragon-tattoo/",
+      tag: "Popular",
+      bookTags: ["physical", "ebook"],
       formats: {
         physical: true,
         pdf: false,
@@ -128,15 +138,18 @@ export const Books = () => {
     },
     {
       id: 4,
-      title: 'Pride and Prejudice',
-      author: 'Jane Austen',
-      slug: 'pride-prejudice',
+      title: "Pride and Prejudice",
+      author: "Jane Austen",
+      slug: "pride-prejudice",
       image:
-        'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=400&fit=crop',
+        "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=400&fit=crop",
       price: 12,
       priceNpr: 960,
-      category: 'romance',
-      link: '/books/pride-prejudice/',
+      discountedPrice: 15,
+      category: "romance",
+      link: "/books/pride-prejudice/",
+      tag: "Classic",
+      bookTags: [ "ebook", "audiobook"],
       formats: {
         physical: true,
         pdf: false,
@@ -145,15 +158,18 @@ export const Books = () => {
     },
     {
       id: 5,
-      title: 'Dune',
-      author: 'Frank Herbert',
-      slug: 'dune',
+      title: "Dune",
+      author: "Frank Herbert",
+      slug: "dune",
       image:
-        'https://images.unsplash.com/photo-1518373714866-3f1478910cc0?w=300&h=400&fit=crop',
+        "https://images.unsplash.com/photo-1518373714866-3f1478910cc0?w=300&h=400&fit=crop",
       price: 22,
       priceNpr: 1760,
-      category: 'sci-fi-fantasy',
-      link: '/books/dune/',
+      discountedPrice: 26,
+      category: "sci-fi-fantasy",
+      link: "/books/dune/",
+      tag: "Award Winner",
+      bookTags: ["physical", "audiobook"],
       formats: {
         physical: true,
         pdf: false,
@@ -162,15 +178,18 @@ export const Books = () => {
     },
     {
       id: 6,
-      title: 'Steve Jobs',
-      author: 'Walter Isaacson',
-      slug: 'steve-jobs',
+      title: "Steve Jobs",
+      author: "Walter Isaacson",
+      slug: "steve-jobs",
       image:
-        'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=300&h=400&fit=crop',
+        "https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=300&h=400&fit=crop",
       price: 28,
       priceNpr: 2240,
-      category: 'biography-memoir',
-      link: '/books/steve-jobs/',
+      discountedPrice: 32,
+      category: "biography-memoir",
+      link: "/books/steve-jobs/",
+      tag: "Biography",
+      bookTags: ["physical", "ebook"],
       formats: {
         physical: true,
         pdf: false,
@@ -180,77 +199,77 @@ export const Books = () => {
   ];
 
   const bookCategories = [
-    { value: 'fiction', label: 'Fiction', href: '/books/?category=fiction' },
+    { value: "fiction", label: "Fiction", href: "/books/?category=fiction" },
     {
-      value: 'non-fiction',
-      label: 'Non-Fiction',
-      href: '/books/?category=non-fiction',
+      value: "non-fiction",
+      label: "Non-Fiction",
+      href: "/books/?category=non-fiction",
     },
     {
-      value: 'mystery-thriller',
-      label: 'Mystery & Thriller',
-      href: '/books/?category=mystery-thriller',
+      value: "mystery-thriller",
+      label: "Mystery & Thriller",
+      href: "/books/?category=mystery-thriller",
     },
-    { value: 'romance', label: 'Romance', href: '/books/?category=romance' },
+    { value: "romance", label: "Romance", href: "/books/?category=romance" },
     {
-      value: 'sci-fi-fantasy',
-      label: 'Science Fiction & Fantasy',
-      href: '/books/?category=sci-fi-fantasy',
-    },
-    {
-      value: 'biography-memoir',
-      label: 'Biography & Memoir',
-      href: '/books/?category=biography-memoir',
+      value: "sci-fi-fantasy",
+      label: "Science Fiction & Fantasy",
+      href: "/books/?category=sci-fi-fantasy",
     },
     {
-      value: 'self-help',
-      label: 'Self-Help & Personal Development',
-      href: '/books/?category=self-help',
+      value: "biography-memoir",
+      label: "Biography & Memoir",
+      href: "/books/?category=biography-memoir",
     },
     {
-      value: 'childrens-ya',
+      value: "self-help",
+      label: "Self-Help & Personal Development",
+      href: "/books/?category=self-help",
+    },
+    {
+      value: "childrens-ya",
       label: "Children's & Young Adult",
-      href: '/books/?category=childrens-ya',
+      href: "/books/?category=childrens-ya",
     },
     {
-      value: 'history-politics',
-      label: 'History & Politics',
-      href: '/books/?category=history-politics',
+      value: "history-politics",
+      label: "History & Politics",
+      href: "/books/?category=history-politics",
     },
     {
-      value: 'business-economics',
-      label: 'Business & Economics',
-      href: '/books/?category=business-economics',
+      value: "business-economics",
+      label: "Business & Economics",
+      href: "/books/?category=business-economics",
     },
     {
-      value: 'health-wellness',
-      label: 'Health & Wellness',
-      href: '/books/?category=health-wellness',
+      value: "health-wellness",
+      label: "Health & Wellness",
+      href: "/books/?category=health-wellness",
     },
     {
-      value: 'travel-adventure',
-      label: 'Travel & Adventure',
-      href: '/books/?category=travel-adventure',
+      value: "travel-adventure",
+      label: "Travel & Adventure",
+      href: "/books/?category=travel-adventure",
     },
     {
-      value: 'cooking-food',
-      label: 'Cooking & Food',
-      href: '/books/?category=cooking-food',
+      value: "cooking-food",
+      label: "Cooking & Food",
+      href: "/books/?category=cooking-food",
     },
     {
-      value: 'art-design',
-      label: 'Art & Design',
-      href: '/books/?category=art-design',
+      value: "art-design",
+      label: "Art & Design",
+      href: "/books/?category=art-design",
     },
     {
-      value: 'religion-spirituality',
-      label: 'Religion & Spirituality',
-      href: '/books/?category=religion-spirituality',
+      value: "religion-spirituality",
+      label: "Religion & Spirituality",
+      href: "/books/?category=religion-spirituality",
     },
     {
-      value: 'tech-science',
-      label: 'Technology & Science',
-      href: '/books/?category=tech-science',
+      value: "tech-science",
+      label: "Technology & Science",
+      href: "/books/?category=tech-science",
     },
   ];
 
@@ -277,7 +296,7 @@ export const Books = () => {
   const FormatCheckmark = ({ isAvailable }) => (
     <div
       className={`w-4 h-4 rounded-full flex items-center justify-center ${
-        isAvailable ? 'bg-green-600' : 'bg-red-500'
+        isAvailable ? "bg-green-600" : "bg-red-500"
       }`}
     >
       {isAvailable ? (
@@ -316,9 +335,9 @@ export const Books = () => {
         <button
           onClick={() => {
             setFilters({
-              keywords: '',
-              duration: '',
-              season: '',
+              keywords: "",
+              duration: "",
+              season: "",
               category: [],
             });
             setMinCost(0);
@@ -333,15 +352,16 @@ export const Books = () => {
   );
 
   return (
-    <section className="w-full container mx-auto my-20 px-4">
+    <div className="bg-[#EBF8F7] ">
+    <section className="w-full  container mx-auto py-10 px-4">
       {/* Page Title with Results Count */}
       <div className="heading container">
         <h1 className="font-bold text-header-2  text-gray-900 text-left my-3">
-          <span className='font-recoleta'>Books</span>{' '}
+          <span className="font-recoleta">Books</span>{" "}
           {filteredBooks.length > 0 && (
             <span className="text-sm font-normal text-gray-600">
               ({filteredBooks.length} result
-              {filteredBooks.length !== 1 ? 's' : ''})
+              {filteredBooks.length !== 1 ? "s" : ""})
             </span>
           )}
         </h1>
@@ -367,7 +387,7 @@ export const Books = () => {
                 id="keywords"
                 name="q"
                 value={filters.keywords}
-                onChange={(e) => handleFilterChange('keywords', e.target.value)}
+                onChange={(e) => handleFilterChange("keywords", e.target.value)}
                 className="appearance-none border outline-none ring-0 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-green-500"
                 placeholder="Enter keywords"
               />
@@ -405,7 +425,7 @@ export const Books = () => {
                 id="duration"
                 name="duration"
                 value={filters.duration}
-                onChange={(e) => handleFilterChange('duration', e.target.value)}
+                onChange={(e) => handleFilterChange("duration", e.target.value)}
                 className="outline-none ring-0 block w-full bg-white border px-2 py-2 pr-8 rounded focus:border-green-500"
               >
                 <option value="">Any</option>
@@ -428,7 +448,7 @@ export const Books = () => {
                 id="season"
                 name="season"
                 value={filters.season}
-                onChange={(e) => handleFilterChange('season', e.target.value)}
+                onChange={(e) => handleFilterChange("season", e.target.value)}
                 className="outline-none ring-0 block w-full bg-white border px-2 py-2 pr-8 rounded focus:border-green-500"
               >
                 <option value="">Any Format</option>
@@ -460,7 +480,7 @@ export const Books = () => {
                       value={category.value}
                       checked={filters.category.includes(category.value)}
                       onChange={(e) =>
-                        handleFilterChange('category', category.value)
+                        handleFilterChange("category", category.value)
                       }
                       className="form-checkbox h-5 w-5 text-green-600 rounded focus:ring-green-500"
                     />
@@ -482,9 +502,9 @@ export const Books = () => {
               <button
                 onClick={() => {
                   setFilters({
-                    keywords: '',
-                    duration: '',
-                    season: '',
+                    keywords: "",
+                    duration: "",
+                    season: "",
                     category: [],
                   });
                   setMinCost(0);
@@ -512,49 +532,22 @@ export const Books = () => {
         ) : (
           <div className="featured-books grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 lg:col-span-3 gap-4">
             {filteredBooks.map((book) => (
-              <div
-                key={book.id}
-                className="book bg-white rounded-lg shadow-md hover:shadow-lg ease-in-out duration-300 transition-all h-fit overflow-hidden"
-              >
-                <a href={book.link} className="block">
-                  <img
-                    src={book.image}
-                    alt={book.title}
-                    className="h-52 object-contain  w-full"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg mb-2 text-gray-900 hover:text-green-600 transition-colors">
-                      {book.title}
-                    </h3>
-                    <h2 className="text-gray-600 text-sm mb-3">
-                      Price:{' '}
-                      <span className="font-bold text-gray-900 text-lg">
-                        Nrs.{book.priceNpr}
-                      </span>
-                    </h2>
-
-                    {/* Format Availability */}
-                    <div className="flex items-center gap-4 text-xs text-gray-600">
-                      <div className="flex items-center gap-1">
-                        <FormatCheckmark isAvailable={book.formats.physical} />
-                        <span>Physical</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <FormatCheckmark isAvailable={book.formats.pdf} />
-                        <span>PDF</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <FormatCheckmark isAvailable={book.formats.audiobook} />
-                        <span>Audio</span>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </div>
+              <a key={book.id} href={book.link} className="block">
+                <CardBook
+                  tag={book.tag}
+                  image={book.image}
+                  bookTags={book.bookTags}
+                  title={book.title}
+                  writer={book.author}
+                  price={book.price}
+                  discountedPrice={book.discountedPrice}
+                />
+              </a>
             ))}
           </div>
         )}
       </section>
     </section>
+    </div>
   );
 };
