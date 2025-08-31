@@ -30,7 +30,6 @@ const Hero = () => {
                 <p className="text-body-2 text-primary-600">Discover, read, and connect with the world's most captivating stories. From physical books to digital adventures, your perfect read is just a click away.</p>
                 <div className="flex gap-6">
                     <Button style="fill" color="info-green" size="medium" iconRight="placeholder" text="Explore Books" />
-                    {/* <Button style="line" color="primary" size="medium" text="Join Community" /> */}
                 </div>
             </div>
             <EmblaCarousel slides={SLIDES} options={OPTIONS} />

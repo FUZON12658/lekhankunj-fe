@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import Button from "../common/button"
 import Link from 'next/link';
 import { NextButton, PrevButton } from '../home/hero-carousel/EmblaCarouselArrowButtons';
+import { ArrowRight } from 'lucide-react';
 
 // JSON data for the about section
 const aboutData = {
   hero: {
-    title: "About Us",
+    title: "About Lekhankunja",
     description: "Transform your ideas into compelling narratives with our expert ghostwriting services. As Nepal's pioneer in professional writing services, we bring your stories, books, and content to life with creativity, precision, and authenticity."
   },
   features: [
@@ -132,7 +133,7 @@ export const About = () => {
 
         {/* Content */}
         <div className="pl-3">
-          <p className="text-gray-800 p-3 text-center">
+          <p className="text-gray-800 p-3 text-left">
             {aboutData.hero.description}
           </p>
           
@@ -156,13 +157,7 @@ export const About = () => {
             <h1 className="text-4xl font-bold mb-4">{aboutData.cta.title}</h1>
             <p className="text-xl mb-6">{aboutData.cta.description}</p>
             <Link href="/contact/" className='mx-auto w-full flex items-center justify-center'>
-              <Button 
-                style="fill" 
-                color="info-green" 
-                size="medium" 
-                iconRight="placeholder" 
-                text={aboutData.cta.buttonText} 
-              />
+                <Button style="line" color="primary" size="medium" text={aboutData.cta.buttonText} />
             </Link>
           </div>
         </div>
