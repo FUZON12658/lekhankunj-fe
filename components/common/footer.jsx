@@ -152,7 +152,7 @@ const Footer = () => {
       <div className="container py-10">
         <div className="flex items-start justify-between">
           <div className="max-w-md flex flex-col gap-6">
-            <Image src="/logo.png" alt="Logo" width={200} height={42} />
+            <Image src="/logo.svg" alt="Logo" width={200} height={42} />
             <p className="text-body-2 text-primary-600">
               The largest, most complete and trusted online bookstore in the
               world. With us, you can shop online & help save your high street

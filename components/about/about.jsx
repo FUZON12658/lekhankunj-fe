@@ -153,7 +153,7 @@ export const About = () => {
       {/* CTA Section */}
       <div className="bg-cover bg-top bg-info-green-600 rounded bg-no-repeat relative mt-20">
         <div className="bg-opacity-50 py-20 rounded">
-          <div className="container mx-auto text-center text-white max-w-[550px]">
+          <div className="container mx-auto text-center text-white max-w-[34.375rem]">
             <h1 className="text-4xl font-bold mb-4">{aboutData.cta.title}</h1>
             <p className="text-xl mb-6">{aboutData.cta.description}</p>
             <Link href="/contact/" className='mx-auto w-full flex items-center justify-center'>
