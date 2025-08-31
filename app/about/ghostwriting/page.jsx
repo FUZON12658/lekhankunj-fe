@@ -4,7 +4,7 @@ import React from 'react'
 // JSON data for Creative Classes
 const ghostwritingData = {
   hero: {
-    title: "Ghostwriting",
+    title: "About Ghostwriting",
     description: ""
   },
   features: [
