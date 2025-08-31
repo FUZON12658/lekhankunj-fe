@@ -84,7 +84,7 @@ const Footer = () => {
       linkType: "About Bookstore",
       links: [
         { title: "Explore", url: "/" },
-        { title: "Jobs", url: "/", tag: "new!" },
+        // { title: "Jobs", url: "/", tag: "new!" },
         { title: "About Us", url: "/" },
         { title: "Contact Us", url: "/" },
       ],

@@ -42,7 +42,7 @@ const Featured = () => {
   ];
   return (
     <div className="flex flex-col gap-12 bg-[#EBF8F7] items-center py-24">
-      <div className="text-header-2 font-recoleta">Featured This Month</div>
+      <div className="text-header-2 font-recoleta">Featured Books</div>
       <div className="container flex gap-6">
         {metadata.map((item, index) => (
           <CardBook key={index} {...item} />

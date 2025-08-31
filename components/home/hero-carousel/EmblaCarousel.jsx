@@ -1,6 +1,7 @@
 "use client"
 import React, { useCallback, useEffect, useRef } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
+import Autoplay from 'embla-carousel-autoplay'
 import {
   NextButton,
   PrevButton,
@@ -15,8 +16,19 @@ const numberWithinRange = (number, min, max) =>
   Math.min(Math.max(number, min), max)
 
 const EmblaCarousel = (props) => {
-  const { slides, options } = props
-  const [emblaRef, emblaApi] = useEmblaCarousel(options)
+  const { slides, options, autoplayDelay = 3000, stopOnInteraction = true } = props
+  
+  // Create autoplay plugin instance
+  const autoplay = useRef(
+    Autoplay({ 
+      delay: autoplayDelay, 
+      stopOnInteraction: stopOnInteraction,
+      stopOnMouseEnter: true,
+      playOnInit: true
+    })
+  )
+  
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [autoplay.current])
   const tweenFactor = useRef(0)
   const tweenNodes = useRef([])
 

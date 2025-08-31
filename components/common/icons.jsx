@@ -42,6 +42,22 @@ export const CartIcon = ({ className }) => {
   );
 };
 
+export const CartPlusIcon = ({ className }) => {
+
+  return (
+    <div className="relative inline-block">
+      <CartIcon className={className} />
+      
+        <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-semibold rounded-full h-4 w-4 flex items-center justify-center shadow-md">
+          +
+        </span>
+      
+    </div>
+  );
+};
+
+
+
 export const CartIconWhite = ({ className }) => {
   return (
     <svg

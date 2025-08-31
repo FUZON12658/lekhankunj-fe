@@ -79,7 +79,7 @@ const Header = () => {
     <header className="bg-primary-100 h-[5.625rem] grid place-items-center sticky top-0 z-[9999]">
       <div className="container flex justify-between items-center">
         <Link href="/">
-          <Image src="/logo.png" alt="Logo" width={200} height={42} />
+          <Image src="/logo.svg" alt="Logo" width={200} height={42} />
         </Link>
         
         <div className="flex justify-center gap-9">
