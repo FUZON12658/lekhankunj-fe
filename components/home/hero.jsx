@@ -104,12 +104,12 @@ import EmblaCarousel from "./hero-carousel/EmblaCarousel";
 
 const OPTIONS = { containScroll: false, align: "start" };
 const IMAGE_SOURCES = [
-  "/home/0.png",
-  "/home/1.jpg",
-  "/home/2.jpg",
-  "/home/3.jpg",
-  "/home/4.jpg",
-  "/home/5.jpg",
+  "/hero/0.png",
+  "/hero/1.jpg",
+  "/hero/2.jpg",
+  "/hero/3.jpg",
+  "/hero/4.jpg",
+  "/hero/5.jpg",
 ];
 const SLIDES = IMAGE_SOURCES.map((src, index) => (
   <Image
