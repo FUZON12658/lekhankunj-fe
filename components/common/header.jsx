@@ -19,7 +19,7 @@ const staticNavLinks = {
     name: "About us",
     href: "/about/",
     items: [
-      { name: "Lekhankunja", href: "/about/" },
+      { name: "Lekhankunja Academy", href: "/about/" },
       { name: "Ghostwriting", href: "/about/ghostwriting" },
       { name: "Creative Writing Classes", href: "/about/creative-classes" },
       { name: "Our Team", href: "/about/our-team" },

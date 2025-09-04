@@ -10,18 +10,18 @@ const ghostwritingData = {
   features: [
     {
       id: 1,
-      title: "Professional Excellence",
-      description: "Pioneer ghostwriting company in Nepal with years of experience in transforming ideas into published works across various genres and formats."
+      title: "Our Expertise",
+      description: "We work with celebrities, politicians, leaders, and respected figures whose stories can inspire society. Our professional ghostwriters ensure authenticity and creativity in every project."
     },
     {
       id: 2,
       title: "Complete Confidentiality",
-      description: "Your stories remain yours. We maintain strict confidentiality and ensure your authorship is protected throughout the entire writing process."
+      description: "Your story remains yours. We maintain strict confidentiality throughout the writing and publishing journey."
     },
     {
       id: 3,
-      title: "Diverse Writing Expertise",
-      description: "From books and novels to articles and web content, our skilled ghostwriters excel across multiple genres, industries, and content formats."
+      title: "Global Services",
+      description: "Our services extend not just in Nepal but also to individuals, organizations, and businesses worldwide. Alongside ghostwriting, we encourage young writers to contribute and we also run creative writing classes (both physical and online). "
     }
   ],
   cta: {
@@ -31,11 +31,11 @@ const ghostwritingData = {
   },
   slider: {
     images: [
-      { id: 1, url: "https://picsum.photos/600/400?random=21", alt: "Professional writing" },
-      { id: 2, url: "https://picsum.photos/600/400?random=22", alt: "Manuscript editing" },
-      { id: 3, url: "https://picsum.photos/600/400?random=23", alt: "Published books" },
-      { id: 4, url: "https://picsum.photos/600/400?random=24", alt: "Author consultation" },
-      { id: 5, url: "https://picsum.photos/600/400?random=25", alt: "Content creation" }
+      { id: 1, url: "/ghostwriting/1.jpg", alt: "Professional writing" },
+      { id: 2, url: "/ghostwriting/2.jpg", alt: "Manuscript editing" },
+      { id: 3, url: "/ghostwriting/3.jpg", alt: "Published books" },
+      { id: 4, url: "/ghostwriting/4.jpg", alt: "Author consultation" },
+      { id: 5, url: "/ghostwriting/5.jpg", alt: "Content creation" }
     ]
   }
 };

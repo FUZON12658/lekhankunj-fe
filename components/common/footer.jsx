@@ -154,9 +154,7 @@ const Footer = () => {
           <div className="max-w-md flex flex-col gap-6">
             <Image src="/logo.svg" alt="Logo" width={200} height={42} />
             <p className="text-body-2 text-primary-600">
-              The largest, most complete and trusted online bookstore in the
-              world. With us, you can shop online & help save your high street
-              at the same time
+              A trusted hub for writing, publishing, and storytelling in Nepal. From writing and book publishing to curated reads and writer workshops, we connect voices with readers and ideas with impact.
             </p>
             <div className="flex gap-4">
               <Button

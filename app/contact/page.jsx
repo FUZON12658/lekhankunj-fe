@@ -44,9 +44,9 @@ const page = () => {
                       Our Office
                     </h3>
                     <p className="text-gray-600">
-                      Kathmandu, Nepal
+                      CDO Tole, Thapagaun, New Baneshwor
                       <br />
-                      Bagmati Province, Nepal
+                      Kathmandu, Nepal
                     </p>
                   </div>
                 </li>
@@ -74,9 +74,9 @@ const page = () => {
                       Contact Information
                     </h3>
                     <p className="text-gray-600">
-                      Phone: +977 (Available on Request)
+                      Phone: <a href='tel:+015245111' className='underline'>01 5245111</a>, <a href="tel:+9779851004761" className='underline'>9851004761</a>, <a href="tel:+9779769761738" className='underline'>9769761738</a>,
                     </p>
-                    <p className="text-gray-600">Email: info@ghostwritingnepal.com</p>
+                    <p className="text-gray-600">Email: <a className='underline' href="mailto:ghostwriting.nepal@gmail.com">ghostwriting.nepal@gmail.com</a></p>
                   </div>
                 </li>
                 <li className="flex">

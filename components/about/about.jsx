@@ -1,46 +1,55 @@
-"use client"
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import Button from "../common/button";
-import { NextButton, PrevButton } from '../home/hero-carousel/EmblaCarouselArrowButtons';
+import {
+  NextButton,
+  PrevButton,
+} from "../home/hero-carousel/EmblaCarouselArrowButtons";
 
 // JSON data for the about section
 const aboutData = {
   hero: {
-    title: "About Lekhankunja",
-    description: "Transform your ideas into compelling narratives with our expert ghostwriting services. As Nepal's pioneer in professional writing services, we bring your stories, books, and content to life with creativity, precision, and authenticity."
+    title: "About Lekhankunja Academy",
+    description:
+      "Soon transforming into an academy, Lekhan Kunja will be a vibrant hub for creativity, arts, and learning, nurturing talent in literature, performing arts, music, and visual arts.",
   },
   features: [
     {
       id: 1,
-      title: "Professional Excellence",
-      description: "Pioneer ghostwriting company in Nepal with years of experience in transforming ideas into published works."
+      title: "Ghostwriting",
+      description:
+        "Our main objective is to craft biographies and memoirs of highly regarded individuals, whether or not a charge is involved. As pioneers in this field, we have published over 500 biographies across diverse sectors and are currently working on nearly 1,000 stories, ensuring every story finds its voice, even if writing isn’t your strength.",
     },
     {
       id: 2,
-      title: "Complete Confidentiality",
-      description: "Your stories remain yours. We maintain strict confidentiality and ensure your authorship is protected throughout the writing process."
+      title: "Creative Writing Class",
+      description:
+        "Running for more than 20 batches, our classes are led by well-known, experienced writers. Students learn storytelling, poetry, and essays, while discovering and refining their unique voice under expert guidance.",
     },
     {
       id: 3,
       title: "Diverse Writing Expertise",
-      description: "From books and novels to articles and web content, our skilled writers excel across multiple genres and formats."
-    }
+      description:
+        "From books and novels to articles and web content, our skilled writers excel across multiple genres and formats.",
+    },
   ],
   cta: {
-    title: "Start Your Writing Journey",
-    description: "Ready to turn your ideas into published reality? Let our expert ghostwriters craft your story with professional excellence and creative flair.",
-    buttonText: "Contact Us"
+    title: "Kunja Theatre, Music & Art Classes",
+    description:
+      "A creative space where students perform, express, and explore their talents. From acting and stagecraft to music and visual arts, we nurture skill, confidence, and artistic imagination in every learner.",
+    buttonText: "Contact Us",
   },
   slider: {
     images: [
-      { id: 1, url: "https://picsum.photos/600/400?random=1", alt: "Writing workspace" },
-      { id: 2, url: "https://picsum.photos/600/400?random=2", alt: "Professional writers" },
-      { id: 3, url: "https://picsum.photos/600/400?random=3", alt: "Published books" },
-      { id: 4, url: "https://picsum.photos/600/400?random=4", alt: "Creative process" },
-      { id: 5, url: "https://picsum.photos/600/400?random=5", alt: "Writing collaboration" }
-    ]
-  }
+      { id: 1, url: "/lekhankunja/1.jpg", alt: "Writing workspace" },
+      { id: 2, url: "/lekhankunja/2.jpg", alt: "Professional writers" },
+      { id: 3, url: "/lekhankunja/3.jpg", alt: "Published books" },
+      { id: 4, url: "/lekhankunja/4.jpg", alt: "Creative process" },
+      { id: 5, url: "/lekhankunja/5.jpg", alt: "Writing collaboration" },
+      { id: 6, url: "/lekhankunja/6.png", alt: "Writing collaboration" },
+    ],
+  },
 };
 
 export const About = () => {
@@ -49,9 +58,7 @@ export const About = () => {
   // Auto-slide functionality
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => 
-        (prev + 1) % aboutData.slider.images.length
-      );
+      setCurrentSlide((prev) => (prev + 1) % aboutData.slider.images.length);
     }, 4000); // Change slide every 4 seconds
 
     return () => clearInterval(interval);
@@ -62,13 +69,11 @@ export const About = () => {
   };
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => 
-      (prev + 1) % aboutData.slider.images.length
-    );
+    setCurrentSlide((prev) => (prev + 1) % aboutData.slider.images.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => 
+    setCurrentSlide((prev) =>
       prev === 0 ? aboutData.slider.images.length - 1 : prev - 1
     );
   };
@@ -76,9 +81,11 @@ export const About = () => {
   return (
     <section className="container mx-auto py-20">
       <div className="about_section">
-        <h1 className="font-bold font-recoleta text-hero">{aboutData.hero.title}</h1>
+        <h1 className="font-bold font-recoleta text-hero">
+          {aboutData.hero.title}
+        </h1>
       </div>
-      
+
       <div className="items-center lg:grid lg:grid-cols-2">
         {/* Image Slider */}
         <div className="p-3 sm:p-0 col-span-1 h-full mt-12 relative">
@@ -87,7 +94,7 @@ export const About = () => {
               <div
                 key={image.id}
                 className={`absolute inset-0 transition-opacity duration-500 ${
-                  index === currentSlide ? 'opacity-100' : 'opacity-0'
+                  index === currentSlide ? "opacity-100" : "opacity-0"
                 }`}
               >
                 <img
@@ -97,7 +104,7 @@ export const About = () => {
                 />
               </div>
             ))}
-            
+
             {/* Navigation Arrows */}
             <button
               onClick={prevSlide}
@@ -114,7 +121,7 @@ export const About = () => {
               </svg> */}
               <NextButton />
             </button>
-            
+
             {/* Dots Indicator */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
               {aboutData.slider.images.map((_, index) => (
@@ -122,7 +129,9 @@ export const About = () => {
                   key={index}
                   onClick={() => goToSlide(index)}
                   className={`w-3 h-3 rounded-full transition-all ${
-                    index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
+                    index === currentSlide
+                      ? "bg-white"
+                      : "bg-white bg-opacity-50"
                   }`}
                 />
               ))}
@@ -135,7 +144,7 @@ export const About = () => {
           <p className="text-gray-800 p-3 text-left">
             {aboutData.hero.description}
           </p>
-          
+
           {/* Features mapped from JSON */}
           {aboutData.features.map((feature) => (
             <div key={feature.id} className="flex items-center mb-4 p-3">
@@ -155,8 +164,16 @@ export const About = () => {
           <div className="container mx-auto text-center text-white max-w-[34.375rem]">
             <h1 className="text-4xl font-bold mb-4">{aboutData.cta.title}</h1>
             <p className="text-xl mb-6">{aboutData.cta.description}</p>
-            <Link href="/contact/" className='mx-auto w-full flex items-center justify-center'>
-                <Button style="line" color="primary" size="medium" text={aboutData.cta.buttonText} />
+            <Link
+              href="/contact/"
+              className="mx-auto w-full flex items-center justify-center"
+            >
+              <Button
+                style="line"
+                color="primary"
+                size="medium"
+                text={aboutData.cta.buttonText}
+              />
             </Link>
           </div>
         </div>

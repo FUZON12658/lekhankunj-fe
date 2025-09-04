@@ -22,7 +22,7 @@ const Welcome = () => {
 
             <div className="w-[33vw] flex flex-col gap-7 items-center text-center relative">
                 <p className="text-header-2 font-recoleta text-[#1A1A1A] text-balance">Welcome to <span className="text-info-green-600">Lekhan Kunja</span></p>
-                <p className="text-body-2 text-primary-600">We're more than just a bookstore - we're a community of passionate readers, dreamers, and storytellers. Founded with the belief that every great story deserves to find its perfect reader, we curate an extraordinary collection of physical books, eBooks, and audiobooks from around the world.</p>
+                <p className="text-body-2 text-primary-600">At Lekhan Kunja, we’re more than just a hub for books — we’re a creative community of writers, readers, and storytellers. Founded with the vision of nurturing voices and ideas, we offer ghostwriting, publishing support, creative writing, theatre, music and art class and a curated collection of books, eBooks, and audiobooks. Here, imagination meets expression, and every story finds the space to grow and connect with its audience.</p>
                 <Button style="fill" size="medium" text="Read Our Story" iconRight="placeholder" color="info-green" />
             </div>
         </div>
