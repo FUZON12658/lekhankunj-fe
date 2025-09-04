@@ -440,6 +440,7 @@ const StockStatus = ({ status }) => {
 };
 
 const BookTypeSelector = ({ product, selectedTypes, onTypeChange, onQuantityChange, quantities }) => {
+  console.log(product)
   const bookTypes = [
     {
       id: 'physical',
@@ -549,15 +550,7 @@ const Info = ({ product }) => {
   const { addToCart } = useCart();
 
   // Enhanced product with pricing for different formats
-  const enhancedProduct = {
-    ...product,
-    pricing: {
-      ...product.pricing,
-      physicalBook: product.pricing.basePrice,
-      ebook: Math.round(product.pricing.basePrice * 0.7), // 30% cheaper
-      audiobook: Math.round(product.pricing.basePrice * 1.2) // 20% more expensive
-    }
-  };
+  const enhancedProduct = product
 
   const calculateTotalPrice = () => {
     let total = 0;
@@ -642,13 +635,12 @@ const Info = ({ product }) => {
         {/* Left section - Book Image */}
         <div className="col-span-2">
           <div className="">
-            <div className="w-[10.75rem] min-w-full overflow-hidden rounded-sm">
+            <div className="w-[12.75rem] relative h-[18.75rem] min-w-[10.75rem] overflow-hidden rounded-sm">
               <Image
                 src={product.images.primary}
                 alt={product.images.altText}
-                width={300}
-                height={533}
-                className="w-full h-full object-contain bg-red-500 rounded-sm shadow-lg"
+                fill
+                className="w-full h-full object-contain rounded-sm shadow-lg"
               />
             </div>
           </div>
@@ -703,27 +695,8 @@ const Info = ({ product }) => {
                 <div className="pt-4 text-sm text-gray-600 space-y-4">
                   <div className="grid grid-cols-1 gap-4">
                     <div>
-                      <h4 className="font-medium text-gray-900">
-                        Inside Valley
-                      </h4>
-                      <p>
-                        Estimated delivery date:{" "}
-                        {product.shipping.insideValley.estimatedDelivery}
-                      </p>
                       <p className="text-xs">
-                        {product.shipping.insideValley.description}
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-gray-900">
-                        Outside Valley
-                      </h4>
-                      <p>
-                        Estimated delivery date:{" "}
-                        {product.shipping.outsideValley.estimatedDelivery}
-                      </p>
-                      <p className="text-xs">
-                        {product.shipping.outsideValley.description}
+                        {product.shipping.estimatedDelivery}
                       </p>
                     </div>
                   </div>
@@ -780,7 +753,28 @@ const Info = ({ product }) => {
               }}
               quantities={quantities}
             />
-
+ {selectedTypes.length > 0 && (
+              <div className="bg-primary-50 p-4 rounded-lg">
+                <h4 className="text-sm font-semibold text-primary-700 mb-2">Selected Items:</h4>
+                <div className="space-y-1">
+                  {selectedTypes.map(typeId => {
+                    const typeName = typeId === 'physical' ? 'Physical Book' :
+                                   typeId === 'ebook' ? 'E-book' : 'Audio Book';
+                    const price = typeId === 'physical' ? enhancedProduct.pricing.physicalBook :
+                                 typeId === 'ebook' ? enhancedProduct.pricing.ebook :
+                                 enhancedProduct.pricing.audiobook;
+                    const quantity = typeId === 'physical' ? (quantities[typeId] || 1) : 1;
+                    
+                    return (
+                      <div key={typeId} className="flex justify-between text-sm text-primary-600">
+                        <span>{typeName} {quantity > 1 ? `× ${quantity}` : ''}</span>
+                        <span>{product.pricing.currency} {(price * quantity).toFixed(2)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             {/* Total Price */}
             <div className="text-header-2 font-recoleta text-primary-700 py-4 border-t border-primary-300">
               Total: {product.pricing.currency} {totalPrice.toFixed(2)}
@@ -815,28 +809,7 @@ const Info = ({ product }) => {
             </div>
 
             {/* Selected Items Summary */}
-            {selectedTypes.length > 0 && (
-              <div className="bg-primary-50 p-4 rounded-lg">
-                <h4 className="text-sm font-semibold text-primary-700 mb-2">Selected Items:</h4>
-                <div className="space-y-1">
-                  {selectedTypes.map(typeId => {
-                    const typeName = typeId === 'physical' ? 'Physical Book' :
-                                   typeId === 'ebook' ? 'E-book' : 'Audio Book';
-                    const price = typeId === 'physical' ? enhancedProduct.pricing.physicalBook :
-                                 typeId === 'ebook' ? enhancedProduct.pricing.ebook :
-                                 enhancedProduct.pricing.audiobook;
-                    const quantity = typeId === 'physical' ? (quantities[typeId] || 1) : 1;
-                    
-                    return (
-                      <div key={typeId} className="flex justify-between text-sm text-primary-600">
-                        <span>{typeName} {quantity > 1 ? `× ${quantity}` : ''}</span>
-                        <span>{product.pricing.currency} {(price * quantity).toFixed(2)}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+           
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 import { CartProvider } from "@/components/common/cart_sidebar";
+import { ReactQueryProvider } from "@/components/common/react_query_provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,11 +26,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
+        <ReactQueryProvider>
         <CartProvider>
         <Header />
         {children}
         <Footer />
         </CartProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

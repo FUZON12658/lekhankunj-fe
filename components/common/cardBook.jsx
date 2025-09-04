@@ -54,9 +54,9 @@ const CardBook = ({
           <div className="flex flex-col gap-2 items-start flex-shrink-0">
             <div className="text-subtitle-4 text-primary-400">Buy Now</div>
             <div className="text-subtitle-2">
-              <span className="text-info-red-400 line-through pr-2 font-normal">
-                NRs. {discountedPrice.toFixed(1)}
-              </span>
+              {discountedPrice && <span className="text-info-red-400 line-through pr-2 font-normal">
+                NRs. {discountedPrice?.toFixed(1)}
+              </span>}
               <span className="text-info-green-600">NRs. {price.toFixed(1)}</span>
             </div>
           </div>

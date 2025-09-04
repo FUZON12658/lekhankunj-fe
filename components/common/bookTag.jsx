@@ -1,8 +1,9 @@
 import Image from "next/image";
 
 const BookTag = ({ tag }) => {
+  console.log(tag);
   const metadata =
-    tag === "physical"
+    tag === "physical"|| tag === "paperback"
       ? {
           title: "Physical Book",
           icon: "/placeholder.png",
@@ -10,7 +11,7 @@ const BookTag = ({ tag }) => {
           background: "bg-[#DAF6FF]",
           iconBackground: "bg-[#418295]",
         }
-      : tag === "ebook"
+      : tag === "ebook"|| tag === "digitalbook"
       ? {
           title: "eBooks",
           icon: "/placeholder.png",

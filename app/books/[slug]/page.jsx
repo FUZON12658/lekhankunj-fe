@@ -1,118 +1,164 @@
 "use client";
+import { getBookBySlug } from "@/api/books";
 import Info from "@/components/product/info";
 import Similar from "@/components/product/similar";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import React from "react";
 
-const PRODUCT_ARRAY = [
-  {
-    id: "1",
-    title: "The Island of Doctor Moreau",
-    slug: "the-island-of-dr-moreau",
+// Helper function to transform API data to component format
+const transformApiDataToProduct = (apiData) => {
+  if (!apiData) return null;
+
+  // Determine currency and prices based on user location/timezone
+  const isNepal = Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Kathmandu' || 
+                  navigator.language.includes('ne') ||
+                  // You can add more Nepal detection logic here
+                  true; // For now, defaulting to Nepal
+
+  const currency = isNepal ? "NPR" : "USD";
+  const basePrice = isNepal ? apiData.paperback_price_npr : apiData.paperback_price_usd;
+  const ebookPrice = isNepal ? apiData.digitalbook_price_npr : apiData.digitalbook_price_usd;
+  const audiobookPrice = isNepal ? apiData.audiobook_price_npr : apiData.audiobook_price_usd;
+
+  // Get primary image
+  const primaryImage = apiData.images && apiData.images.length > 0 
+    ? `${process.env.NEXT_PUBLIC_FILE_HOST}${apiData.images[0].file.path}` // Adjust path as needed for your image serving
+    : "/book.jpg"; // fallback image
+
+  return {
+    id: apiData.id,
+    title: apiData.name,
+    slug: apiData.slug,
     author: {
-      id: "h-g-wells",
-      name: "H.G. Wells",
+      id: apiData.author?.[0]?.slug || "unknown",
+      name: apiData.author?.[0]?.full_name || "Unknown Author",
     },
-    publisher: "Random House Publishing Group",
-    isbn: "9780486290270",
-    format: ["physical", "ebook", "audiobook"],
-
+    publisher: apiData.created_by?.full_name || "Unknown Publisher", // Using created_by as publisher
+    isbn: apiData.isbn,
+    format: apiData.available_on.map(format => {
+      // Map API format names to your component format names
+      switch(format) {
+        case "paperback": return "physical";
+        case "digitalbook": return "ebook";
+        case "audiobook": return "audiobook";
+        default: return format;
+      }
+    }),
     pricing: {
-      currency: "NPR",
-      basePrice: 890.0,
-      physicalBook: 890.0,
-      ebook: 623.0, // 30% less than physical
-      audiobook: 1068.0, // 20% more than physical
-      salePrice: null,
+      currency: currency,
+      basePrice: basePrice,
+      physicalBook: basePrice,
+      ebook: ebookPrice,
+      audiobook: audiobookPrice,
+      salePrice: null, // Add sale logic if needed
     },
     stock: {
-      status: "in_stock",
-      quantity: 15,
+      status: apiData.status === "draft" ? "in_stock" : "in_stock", // Adjust based on your status logic
+      quantity: 15, // Default quantity, adjust based on your inventory system
     },
     images: {
-      primary: "/book.jpg",
-      altText: "The Island of Doctor Moreau by H.G. Wells book cover",
+      primary: primaryImage,
+      altText: `${apiData.name} book cover`,
     },
     description: {
-      short:
-        "A haunting tale of scientific experimentation and moral boundaries on a mysterious island.",
-      full: "First published in 1896, The Island of Doctor Moreau is one of H.G. Wells' most disturbing and thought-provoking science fiction novels. The story follows Edward Prendick, a shipwrecked man who finds himself on a remote island where the enigmatic Dr. Moreau conducts horrifying experiments, transforming animals into human-like beings through vivisection and surgical procedures. As Prendick discovers the dark truth behind Moreau's work, he must confront questions about the nature of humanity, scientific ethics, and the thin line between civilization and savagery.",
+      short: apiData.meta_description || apiData.description?.substring(0, 100) + "...",
+      full: apiData.description,
       highlights: [
         {
-          title: "Classic Science Fiction",
-          description:
-            "One of the pioneering works of science fiction that explores themes still relevant today.",
+          title: "Edition",
+          description: `${apiData.edition} - ${apiData.page_count} pages`,
         },
         {
-          title: "Ethical Questions",
-          description:
-            "Examines the moral implications of scientific experimentation and the limits of human knowledge.",
+          title: "Language",
+          description: apiData.language === "en" ? "English" : apiData.language,
         },
         {
-          title: "Psychological Horror",
-          description:
-            "A masterful blend of adventure and horror that questions what it means to be human.",
+          title: "Categories",
+          description: apiData.categories?.map(cat => cat.name).join(", ") || "General",
         },
         {
-          title: "Influential Literature",
-          description:
-            "A work that has influenced countless science fiction writers and filmmakers.",
+          title: "Genre",
+          description: apiData.genre?.map(g => g.name).join(", ") || "Fiction",
         },
         {
-          title: "Timeless Themes",
-          description:
-            "Explores evolution, ethics, and the relationship between humans and animals.",
+          title: "Publication",
+          description: `Published on ${new Date(apiData.publication_date).toLocaleDateString()}`,
         },
       ],
-      tagline:
-        "A chilling exploration of science without conscience and the boundaries of human nature.",
+      tagline: apiData.meta_description || "A captivating read that will keep you engaged from start to finish.",
     },
     shipping: {
-      insideValley: {
-        estimatedDelivery: "29 August",
-        description:
-          "Faster delivery within the valley. Orders placed before 2 PM are processed the same day.",
-      },
-      outsideValley: {
-        estimatedDelivery: "29 August - 31 August",
-        description:
-          "Outside the valley, orders arrive in 2-3 days near district HQs or major towns; rural or remote areas may take longer.",
-      },
+      estimatedDelivery: apiData.estimated_delivery_time || "3-5 Business Days",
     },
     availability: {
       physical: {
-        inStock: true,
-        quantity: 15
+        inStock: apiData.available_on.includes("paperback"),
+        quantity: 15 // Default quantity
       },
       ebook: {
-        inStock: true,
+        inStock: apiData.available_on.includes("digitalbook"),
         unlimited: true
       },
       audiobook: {
-        inStock: true, 
+        inStock: apiData.available_on.includes("audiobook"), 
         unlimited: true
       }
     },
     tags: [
-      "h-g-wells",
-      "classic",
-      "science-fiction",
-      "horror",
-      "vivisection",
-      "evolution",
+      apiData.slug,
+      ...apiData.categories?.map(cat => cat.slug) || [],
+      ...apiData.genre?.map(g => g.slug) || [],
+      apiData.language,
     ],
-  },
-];
+  };
+};
+
+// Helper function to calculate delivery dates
+const calculateDeliveryDate = (daysFromNow) => {
+  const date = new Date();
+  date.setDate(date.getDate() + daysFromNow);
+  return date.toLocaleDateString('en-US', { 
+    month: 'long', 
+    day: 'numeric' 
+  });
+};
 
 const Product = () => {
   const { slug } = useParams();
-  const product = PRODUCT_ARRAY.find((prod) => prod.slug === "the-island-of-dr-moreau");
 
-  if (!product) {
+  const { data: apiData, isLoading, isError } = useQuery({
+    queryKey: ['books-slug', slug],
+    queryFn: () => getBookBySlug(slug)
+  });
+
+  React.useEffect(() => {
+    console.log('API Data:', apiData);
+  }, [apiData]);
+
+  // Transform API data to component format
+  const product = React.useMemo(() => {
+    if (!apiData) return null;
+    return transformApiDataToProduct(apiData);
+  }, [apiData]);
+
+  if (isLoading) {
+    return (
+      <div className="container py-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-primary-600">Loading book details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !product) {
     return (
       <div className="container py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Product not found</h1>
-          <p className="text-gray-600">The book you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-600">The book you're looking for doesn't exist or couldn't be loaded.</p>
         </div>
       </div>
     );
@@ -121,7 +167,7 @@ const Product = () => {
   return (
     <>
       <Info product={product} />
-      <Similar />
+      <Similar slug={slug} />
     </>
   );
 };
