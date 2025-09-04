@@ -1,12 +1,11 @@
 "use client";
-import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { Check, X } from "lucide-react";
-import { DualRangeSlider } from "../ui/dual_range_slider";
-import CardBook from "../common/cardBook";
-import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import { getAllBooks, getAllCategories, getAllGenre } from "@/api/books";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import CardBook from "../common/cardBook";
+import { DualRangeSlider } from "../ui/dual_range_slider";
 
 // Custom hook for debouncing
 const useDebounce = (value, delay) => {
@@ -341,7 +340,6 @@ const BooksGrid = React.memo(({ books, isLoading }) => {
 BooksGrid.displayName = 'BooksGrid';
 
 export const Books = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   
   const [minCost, setMinCost] = useState(0);
