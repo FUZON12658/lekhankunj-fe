@@ -13,7 +13,7 @@ import { getAllCategories, getAllGenre } from "@/api/books";
 const staticNavLinks = {
   main: [
     { name: "Home", href: "/" },
-    // { name: "Contact", href: "/contact/" },
+    { name: "Contact", href: "/contact/" },
   ],
   about: {
     name: "About us",
@@ -257,12 +257,12 @@ const Header = () => {
             </div>
 
             {/* Contact link */}
-            <Link
+            {/* <Link
               href={staticNavLinks.main[1].href}
               className="text-btn font-semibold uppercase hover:text-green-600 transition-colors duration-200"
             >
               {staticNavLinks.main[1].name}
-            </Link>
+            </Link> */}
           </div>
 
           <div className="flex items-center gap-8">

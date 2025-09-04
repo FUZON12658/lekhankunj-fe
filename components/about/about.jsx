@@ -1,9 +1,8 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import Button from "../common/button"
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import Button from "../common/button";
 import { NextButton, PrevButton } from '../home/hero-carousel/EmblaCarouselArrowButtons';
-import { ArrowRight } from 'lucide-react';
 
 // JSON data for the about section
 const aboutData = {
