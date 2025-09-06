@@ -35,10 +35,11 @@ const BookTypes = ({ type }) => {
     return (
         <Link
             href={metadata.href}
-            className="bg-[#F8F8F8] rounded-2xl flex items-center gap-4 px-5 py-4 min-w-2xs "
+            className=" rounded-3xl flex items-center gap-4 px-2 py-2 min-w-2xs border-2 border-transparent hover:border-black "
         >
+            <div className="bg-[#F8F8F8] rounded-2xl flex items-center gap-4 px-5 py-4 min-w-2xs">
             <div
-                className={`w-16 h-16 grid place-items-center rounded-full ${metadata.background}`}
+                className={`w-16 h-16 grid p- place-items-center rounded-full ${metadata.background}`}
             >
                 {metadata.icon}
             </div>
@@ -49,6 +50,7 @@ const BookTypes = ({ type }) => {
                 <p className="text-body-2 pt-1 text-primary-500">
                     {metadata.subtitle}
                 </p>
+            </div>
             </div>
         </Link>
     );
