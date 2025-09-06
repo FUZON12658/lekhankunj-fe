@@ -33,9 +33,15 @@ const aboutData = {
       description:
         "From books and novels to articles and web content, our skilled writers excel across multiple genres and formats.",
     },
+    {
+      id: 4,
+      title: "Kunja Theatre, Music & Art Classes",
+      description:
+        "A creative space where students perform, express, and explore their talents. From acting and stagecraft to music and visual arts, we nurture skill, confidence, and artistic imagination in every learner.",
+    },
   ],
   cta: {
-    title: "Kunja Theatre, Music & Art Classes",
+    title: "Join Our Creative Community",
     description:
       "A creative space where students perform, express, and explore their talents. From acting and stagecraft to music and visual arts, we nurture skill, confidence, and artistic imagination in every learner.",
     buttonText: "Contact Us",
@@ -84,6 +90,9 @@ export const About = () => {
         <h1 className="font-bold font-recoleta text-hero">
           {aboutData.hero.title}
         </h1>
+                  <p className="text-gray-800 py-3 w-[60rem] text-left">
+            {aboutData.hero.description}
+          </p>
       </div>
 
       <div className="items-center lg:grid lg:grid-cols-2">
@@ -141,14 +150,9 @@ export const About = () => {
 
         {/* Content */}
         <div className="pl-3">
-          <p className="text-gray-800 p-3 text-left">
-            {aboutData.hero.description}
-          </p>
-
           {/* Features mapped from JSON */}
           {aboutData.features.map((feature) => (
             <div key={feature.id} className="flex items-center mb-4 p-3">
-              <span className="text-green-500 text-xl mr-2">✔</span>
               <div>
                 <div className="font-semibold mb-1">{feature.title}</div>
                 <p>{feature.description}</p>
@@ -170,7 +174,7 @@ export const About = () => {
             >
               <Button
                 style="line"
-                color="primary"
+                color="white"
                 size="medium"
                 text={aboutData.cta.buttonText}
               />

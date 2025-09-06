@@ -1,13 +1,13 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import Button from "../common/button"
-import Link from 'next/link';
-import { NextButton, PrevButton } from '../home/hero-carousel/EmblaCarouselArrowButtons';
-
-
+"use client";
+import React, { useState, useEffect } from "react";
+import Button from "../common/button";
+import Link from "next/link";
+import {
+  NextButton,
+  PrevButton,
+} from "../home/hero-carousel/EmblaCarouselArrowButtons";
 
 // JSON data for Ghostwriting Services
-
 
 // Reusable Section Component
 export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
@@ -16,9 +16,7 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
   // Auto-slide functionality
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => 
-        (prev + 1) % data.slider.images.length
-      );
+      setCurrentSlide((prev) => (prev + 1) % data.slider.images.length);
     }, 4000); // Change slide every 4 seconds
 
     return () => clearInterval(interval);
@@ -29,13 +27,11 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
   };
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => 
-      (prev + 1) % data.slider.images.length
-    );
+    setCurrentSlide((prev) => (prev + 1) % data.slider.images.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => 
+    setCurrentSlide((prev) =>
       prev === 0 ? data.slider.images.length - 1 : prev - 1
     );
   };
@@ -45,7 +41,7 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
       <div className="about_section">
         <h1 className="font-bold font-recoleta text-hero">{data.hero.title}</h1>
       </div>
-      
+
       <div className="items-center lg:grid lg:grid-cols-2">
         {/* Image Slider */}
         <div className="p-3 sm:p-0 col-span-1 h-full mt-12 relative">
@@ -54,7 +50,7 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
               <div
                 key={image.id}
                 className={`absolute inset-0 transition-opacity duration-500 ${
-                  index === currentSlide ? 'opacity-100' : 'opacity-0'
+                  index === currentSlide ? "opacity-100" : "opacity-0"
                 }`}
               >
                 <img
@@ -64,7 +60,7 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
                 />
               </div>
             ))}
-            
+
             {/* Navigation Arrows */}
             <button
               onClick={prevSlide}
@@ -78,7 +74,7 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
             >
               <NextButton />
             </button>
-            
+
             {/* Dots Indicator */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
               {data.slider.images.map((_, index) => (
@@ -86,7 +82,9 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
                   key={index}
                   onClick={() => goToSlide(index)}
                   className={`w-3 h-3 rounded-full transition-all ${
-                    index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
+                    index === currentSlide
+                      ? "bg-white"
+                      : "bg-white bg-opacity-50"
                   }`}
                 />
               ))}
@@ -99,7 +97,7 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
           <p className="text-gray-800 p-3 text-center">
             {data.hero.description}
           </p>
-          
+
           {/* Features mapped from JSON */}
           {data.features.map((feature) => (
             <div key={feature.id} className="flex items-center mb-4 p-3">
@@ -119,13 +117,15 @@ export const ServiceSection = ({ data, linkHref = "/contact/" }) => {
           <div className="container mx-auto text-center text-white max-w-[550px]">
             <h1 className="text-4xl font-bold mb-4">{data.cta.title}</h1>
             <p className="text-xl mb-6">{data.cta.description}</p>
-            <Link href={linkHref} className='mx-auto w-full flex items-center justify-center'>
-              <Button 
-                style="fill" 
-                color="info-green" 
-                size="medium" 
-                iconRight="placeholder" 
-                text={data.cta.buttonText} 
+            <Link
+              href={linkHref}
+              className="mx-auto w-full flex items-center justify-center"
+            >
+              <Button
+                style="line"
+                color="white"
+                size="medium"
+                text={data.cta.buttonText}
               />
             </Link>
           </div>

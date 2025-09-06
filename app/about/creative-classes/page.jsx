@@ -35,13 +35,13 @@ const creativeClassesData = {
   },
   slider: {
     images: [
-      { id: 1, url: "/creativeclass/1.jpg", alt: "Creative writing workshop" },
-      { id: 2, url: "/creativeclass/2.jpg", alt: "Students in class" },
-      { id: 3, url: "/creativeclass/3.jpg", alt: "Writing exercises" },
-      { id: 4, url: "/creativeclass/4.jpg", alt: "Group discussions" },
-      { id: 5, url: "/creativeclass/5.jpg", alt: "Creative inspiration" },
-      { id: 6, url: "/creativeclass/6.jpg", alt: "Group discussions" },
-      { id: 7, url: "/creativeclass/7.jpg", alt: "Creative inspiration" },
+      { id: 1, url: "/creativewriting/1.jpg", alt: "Creative writing workshop" },
+      { id: 2, url: "/creativewriting/2.jpg", alt: "Students in class" },
+      { id: 3, url: "/creativewriting/3.jpg", alt: "Writing exercises" },
+      { id: 4, url: "/creativewriting/4.jpg", alt: "Group discussions" },
+      { id: 5, url: "/creativewriting/5.jpg", alt: "Creative inspiration" },
+      { id: 6, url: "/creativewriting/6.jpg", alt: "Group discussions" },
+      { id: 7, url: "/creativewriting/7.jpg", alt: "Creative inspiration" },
     ],
   },
 };
